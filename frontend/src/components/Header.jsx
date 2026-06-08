@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { FiSearch, FiHeart, FiUser, FiMapPin } from 'react-icons/fi';
+import { FiSearch, FiHeart, FiUser, FiMapPin, FiShoppingBag, FiActivity, FiTruck, FiHome, FiSettings, FiLogOut } from 'react-icons/fi';
 import { AuthContext } from '../context/AuthContext';
 import './Header.css';
 
@@ -37,10 +37,22 @@ const Header = () => {
               <FiHeart size={20} />
             </div>
             {user ? (
-              <div className="action-item login-register">
+              <div className="action-item login-register user-menu-container">
                 <FiUser size={20} />
-                <span style={{ marginRight: '10px' }}>{user.name}</span>
-                <span onClick={logout} style={{ color: '#d9534f', cursor: 'pointer', fontWeight: 'bold' }}>Logout</span>
+                <span>Hello {user.name}</span>
+                <span className="dropdown-arrow">▾</span>
+                
+                <div className="user-dropdown">
+                  <div className="dropdown-item"><FiShoppingBag /> My Orders</div>
+                  <div className="dropdown-item"><FiHeart /> Shortlisted Vehicles</div>
+                  <div className="dropdown-item"><FiActivity /> My Activity</div>
+                  <div className="dropdown-item"><FiTruck /> My Vehicles</div>
+                  <div className="dropdown-item"><FiHome /> My Garage</div>
+                  <div className="dropdown-item"><FiSettings /> Manage Consents</div>
+                  <div className="dropdown-item"><FiUser /> Profile Settings</div>
+                  <div className="dropdown-divider"></div>
+                  <div className="dropdown-item" onClick={logout}><FiLogOut /> Logout</div>
+                </div>
               </div>
             ) : (
               <Link to="/login" className="action-item login-register" style={{ textDecoration: 'none', color: 'inherit' }}>
