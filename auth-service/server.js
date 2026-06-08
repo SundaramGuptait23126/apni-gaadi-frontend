@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const { connectDB, sequelize } = require('./config/db');
+const { connectRedis } = require('./config/redisClient');
 const authRoutes = require('./routes/authRoutes');
 
 dotenv.config();
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 const startServer = async () => {
     try {
         await connectDB();
+        await connectRedis();
         
         // Sync models with DB (Creates table if it doesn't exist)
         await sequelize.sync({ alter: true });
