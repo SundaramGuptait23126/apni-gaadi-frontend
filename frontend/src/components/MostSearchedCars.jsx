@@ -17,7 +17,7 @@ const MostSearchedCars = () => {
       try {
         const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://localhost:5002/api/cars';
         // Note: The original code used port 5000 and /api/cars/category. Let's ensure it hits the correct backend.
-        const res = await fetch(`${carApiUrl}/category/${activeCategory}`);
+        const res = await fetch(`${carApiUrl}/category/Most%20Searched%20Cars?subCategory=${activeCategory}`);
         const data = await res.json();
         setCars(data);
       } catch (error) {

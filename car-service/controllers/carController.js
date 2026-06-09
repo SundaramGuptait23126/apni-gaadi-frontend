@@ -35,6 +35,9 @@ const addCar = async (req, res) => {
                 await valkeyClient.del('cars_featured');
                 if (category) {
                     await valkeyClient.del(`cars_category_${category}`);
+                    if (subCategory) {
+                        await valkeyClient.del(`cars_category_${category}_sub_${subCategory}`);
+                    }
                 }
                 console.log('Cache invalidated');
             } catch (err) {
@@ -99,7 +102,13 @@ const getCars = async (req, res) => {
 const getCarsByCategory = async (req, res) => {
     try {
         const { category } = req.params;
-        const cacheKey = `cars_category_${category}`;
+        const { subCategory } = req.query;
+        
+        let cacheKey = `cars_category_${category}`;
+        if (subCategory) {
+            cacheKey += `_sub_${subCategory}`;
+        }
+        
         const valkeyClient = getValkeyClient();
 
         // 1. Try to get data from Valkey cache
@@ -107,7 +116,7 @@ const getCarsByCategory = async (req, res) => {
             try {
                 const cachedCars = await valkeyClient.get(cacheKey);
                 if (cachedCars) {
-                    console.log(`Serving category ${category} from Valkey cache`);
+                    console.log(`Serving ${cacheKey} from Valkey cache`);
                     return res.status(200).json(JSON.parse(cachedCars));
                 }
             } catch (err) {
@@ -116,13 +125,18 @@ const getCarsByCategory = async (req, res) => {
         }
 
         // 2. If not in cache, query MongoDB
-        const cars = await Car.find({ category }).sort({ createdAt: -1 });
+        let query = { category };
+        if (subCategory) {
+            query.subCategory = subCategory;
+        }
+
+        const cars = await Car.find(query).sort({ createdAt: -1 });
 
         // 3. Save the result to Valkey cache for 1 hour (3600 seconds)
         if (valkeyClient) {
             try {
                 await valkeyClient.setEx(cacheKey, 3600, JSON.stringify(cars));
-                console.log(`Saved category ${category} to Valkey cache`);
+                console.log(`Saved ${cacheKey} to Valkey cache`);
             } catch (err) {
                 console.error('Cache write error:', err);
             }

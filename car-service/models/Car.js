@@ -6,8 +6,8 @@ const carSchema = new mongoose.Schema({
     tagline: { type: String },
     budget: { type: String },
     type: { type: String, enum: ['New', 'Used'], default: 'New' },
-    category: { type: String, enum: ['SUV', 'Hatchback', 'Sedan', 'MUV', 'Luxury'], required: true },
-    subCategory: { type: String },
+    category: { type: String, enum: ['Most Searched Cars', 'Electric Cars', 'Latest Cars', 'Upcoming Cars'], required: true },
+    subCategory: { type: String, enum: ['SUV', 'Hatchback', 'Sedan', 'MUV', 'Luxury'] },
     imageUrl: { type: String, required: true },
     isFeatured: { type: Boolean, default: false }
 }, { timestamps: true });

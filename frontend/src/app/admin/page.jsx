@@ -7,13 +7,8 @@ import './AdminDashboard.css';
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
   
-  const categorySubcategories = {
-    SUV: ['Compact SUV', 'Mid-size SUV', 'Full-size SUV', 'Off-road SUV'],
-    Hatchback: ['Premium Hatchback', 'Small Hatchback', 'Hot Hatch'],
-    Sedan: ['Compact Sedan', 'Mid-size Sedan', 'Luxury Sedan'],
-    MUV: ['7-Seater', '8-Seater', 'Compact MUV'],
-    Luxury: ['Sports Car', 'Supercar', 'Luxury SUV', 'Luxury Sedan']
-  };
+  const categoriesList = ['Most Searched Cars', 'Electric Cars', 'Latest Cars', 'Upcoming Cars'];
+  const subCategoriesList = ['SUV', 'Hatchback', 'Sedan', 'MUV', 'Luxury'];
 
   const [formData, setFormData] = useState({
     name: '',
@@ -21,8 +16,8 @@ const AdminDashboard = () => {
     tagline: '',
     budget: '',
     type: 'New',
-    category: 'SUV',
-    subCategory: 'Compact SUV',
+    category: 'Most Searched Cars',
+    subCategory: 'SUV',
     isFeatured: true
   });
   const [image, setImage] = useState(null);
@@ -42,18 +37,10 @@ const AdminDashboard = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name === 'category') {
-      setFormData({
-        ...formData,
-        category: value,
-        subCategory: categorySubcategories[value][0] // automatically set the first subcategory
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: type === 'checkbox' ? checked : value
-      });
-    }
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value
+    });
   };
 
   const handleFileChange = (e) => {
@@ -93,7 +80,7 @@ const AdminDashboard = () => {
       if (response.ok) {
         setMessage({ type: 'success', text: 'Car uploaded successfully! It is now live in the database and Cloudinary.' });
         // Reset form
-        setFormData({ name: '', brand: '', tagline: '', budget: '', type: 'New', category: 'SUV', subCategory: 'Compact SUV', isFeatured: true });
+        setFormData({ name: '', brand: '', tagline: '', budget: '', type: 'New', category: 'Most Searched Cars', subCategory: 'SUV', isFeatured: true });
         setImage(null);
         e.target.reset();
       } else {
@@ -153,7 +140,7 @@ const AdminDashboard = () => {
           <div className="form-group">
             <label>Category</label>
             <select name="category" value={formData.category} onChange={handleChange}>
-              {Object.keys(categorySubcategories).map(cat => (
+              {categoriesList.map(cat => (
                 <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
@@ -162,7 +149,7 @@ const AdminDashboard = () => {
           <div className="form-group">
             <label>Subcategory</label>
             <select name="subCategory" value={formData.subCategory} onChange={handleChange}>
-              {categorySubcategories[formData.category].map(sub => (
+              {subCategoriesList.map(sub => (
                 <option key={sub} value={sub}>{sub}</option>
               ))}
             </select>
