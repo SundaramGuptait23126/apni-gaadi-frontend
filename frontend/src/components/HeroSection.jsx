@@ -1,18 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './HeroSection.css';
 
 const HeroSection = () => {
-  const [carType, setCarType] = useState('new'); // 'new' or 'used'
-  const [searchBy, setSearchBy] = useState('budget'); // 'budget' or 'brand'
+  const [carType, setCarType] = useState('new');
+  const [searchBy, setSearchBy] = useState('budget');
+  
+  // New state for dynamic carousel
+  const [featuredCars, setFeaturedCars] = useState([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeaturedCars = async () => {
+      try {
+        const carApiUrl = import.meta.env.VITE_CAR_API_URL || 'http://localhost:5002/api/cars';
+        const response = await fetch(`${carApiUrl}?featured=true`);
+        if (response.ok) {
+          const data = await response.json();
+          setFeaturedCars(data);
+        }
+      } catch (error) {
+        console.error('Error fetching featured cars:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeaturedCars();
+  }, []);
+
+  // Auto-play logic
+  useEffect(() => {
+    if (featuredCars.length === 0) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % featuredCars.length);
+    }, 4000); // Change car every 4 seconds
+    return () => clearInterval(interval);
+  }, [featuredCars]);
+
+  const activeCar = featuredCars[activeIndex] || null;
 
   return (
     <section className="hero-section">
       <div className="hero-background">
-        <img 
-          src="https://images.unsplash.com/photo-1503376713437-0d5b40d6cfa8?auto=format&fit=crop&q=80&w=2000" 
-          alt="Premium Car" 
-          className="hero-image"
-        />
+        {activeCar ? (
+          <img 
+            src={activeCar.imageUrl} 
+            alt={activeCar.name} 
+            className="hero-image fade-in"
+          />
+        ) : (
+          <div className="hero-image-placeholder" style={{ backgroundColor: '#333', width: '100%', height: '100%' }}></div>
+        )}
         <div className="hero-overlay"></div>
       </div>
 
@@ -82,28 +121,35 @@ const HeroSection = () => {
         </div>
 
         <div className="hero-featured">
-          <span className="featured-badge">LAUNCHED</span>
-          <h1 className="featured-title">Stunning Dynamics</h1>
-          <p className="featured-subtitle">The Brand's First EV For India</p>
-          <button className="btn-outline hero-know-more">Know More</button>
+          {activeCar ? (
+            <>
+              <span className="featured-badge">FEATURED</span>
+              <h1 className="featured-title">{activeCar.name}</h1>
+              <p className="featured-subtitle">{activeCar.tagline || activeCar.brand}</p>
+              <button className="btn-outline hero-know-more">Know More</button>
+            </>
+          ) : (
+            <>
+              {loading ? <p style={{color: 'white'}}>Loading Cars...</p> : <p style={{color: 'white'}}>No cars available.</p>}
+            </>
+          )}
 
-          <div className="featured-nav">
-            <div className="nav-item active">
-              <span className="nav-text">Stunning Dynamics</span>
-              <span className="nav-text-sub">Launched</span>
-              <div className="nav-line"></div>
+          {featuredCars.length > 0 && (
+            <div className="featured-nav">
+              {featuredCars.map((car, index) => (
+                <div 
+                  key={car._id} 
+                  className={`nav-item ${index === activeIndex ? 'active' : ''}`}
+                  onClick={() => setActiveIndex(index)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <span className="nav-text">{car.name}</span>
+                  <span className="nav-text-sub">{car.budget ? `₹ ${car.budget}` : car.brand}</span>
+                  <div className="nav-line"></div>
+                </div>
+              ))}
             </div>
-            <div className="nav-item">
-              <span className="nav-text">Aura Facelift</span>
-              <span className="nav-text-sub">Launched</span>
-              <div className="nav-line"></div>
-            </div>
-             <div className="nav-item">
-              <span className="nav-text">Nexon EV</span>
-              <span className="nav-text-sub">Launched</span>
-              <div className="nav-line"></div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </section>
