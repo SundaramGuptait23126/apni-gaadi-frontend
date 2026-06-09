@@ -4,7 +4,7 @@ const { getValkeyClient } = require('../config/valkeyClient');
 // Add a new car (with image upload)
 const addCar = async (req, res) => {
     try {
-        const { name, brand, tagline, budget, type, isFeatured } = req.body;
+        const { name, brand, tagline, budget, type, category, subCategory, isFeatured } = req.body;
         
         // If image uploaded successfully, multer puts the secure URL in req.file.path
         if (!req.file) {
@@ -19,6 +19,8 @@ const addCar = async (req, res) => {
             tagline,
             budget,
             type,
+            category,
+            subCategory,
             imageUrl,
             isFeatured: isFeatured === 'true' || isFeatured === true
         });
@@ -31,6 +33,9 @@ const addCar = async (req, res) => {
             try {
                 await valkeyClient.del('cars_all');
                 await valkeyClient.del('cars_featured');
+                if (category) {
+                    await valkeyClient.del(`cars_category_${category}`);
+                }
                 console.log('Cache invalidated');
             } catch (err) {
                 console.error('Cache invalidation error:', err);
@@ -90,4 +95,44 @@ const getCars = async (req, res) => {
     }
 };
 
-module.exports = { addCar, getCars };
+// Fetch cars by category
+const getCarsByCategory = async (req, res) => {
+    try {
+        const { category } = req.params;
+        const cacheKey = `cars_category_${category}`;
+        const valkeyClient = getValkeyClient();
+
+        // 1. Try to get data from Valkey cache
+        if (valkeyClient) {
+            try {
+                const cachedCars = await valkeyClient.get(cacheKey);
+                if (cachedCars) {
+                    console.log(`Serving category ${category} from Valkey cache`);
+                    return res.status(200).json(JSON.parse(cachedCars));
+                }
+            } catch (err) {
+                console.error('Cache read error:', err);
+            }
+        }
+
+        // 2. If not in cache, query MongoDB
+        const cars = await Car.find({ category }).sort({ createdAt: -1 });
+
+        // 3. Save the result to Valkey cache for 1 hour (3600 seconds)
+        if (valkeyClient) {
+            try {
+                await valkeyClient.setEx(cacheKey, 3600, JSON.stringify(cars));
+                console.log(`Saved category ${category} to Valkey cache`);
+            } catch (err) {
+                console.error('Cache write error:', err);
+            }
+        }
+
+        res.status(200).json(cars);
+    } catch (error) {
+        console.error('Error fetching cars by category:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+module.exports = { addCar, getCars, getCarsByCategory };
