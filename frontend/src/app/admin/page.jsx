@@ -110,6 +110,9 @@ const AdminDashboard = () => {
         <div className="admin-header">
           <h2>Admin Dashboard: Add New Car</h2>
           <p>Upload a new car directly to your MongoDB and Cloudinary storage.</p>
+          <p style={{ color: 'blue', fontWeight: 'bold' }}>
+            System Check: Using API URL: {process.env.NEXT_PUBLIC_CAR_API_URL || 'http://localhost:5002/api/cars'}
+          </p>
         </div>
 
         {message.text && (
