@@ -1,5 +1,7 @@
+"use client";
 import React, { createContext, useState, useEffect } from 'react';
 
+export const authApiUrl = process.env.NEXT_PUBLIC_AUTH_API_URL || 'http://localhost:5001/api/auth';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {

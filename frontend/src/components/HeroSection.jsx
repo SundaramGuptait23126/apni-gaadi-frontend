@@ -1,33 +1,14 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import './HeroSection.css';
 import { optimizeCloudinaryUrl } from '../utils/imageUtils';
 
-const HeroSection = () => {
+const HeroSection = ({ initialFeaturedCars }) => {
   const [carType, setCarType] = useState('new');
   const [searchBy, setSearchBy] = useState('budget');
   
-  const [featuredCars, setFeaturedCars] = useState([]);
+  const [featuredCars, setFeaturedCars] = useState(initialFeaturedCars || []);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchFeaturedCars = async () => {
-      try {
-        const carApiUrl = import.meta.env.VITE_CAR_API_URL || 'http://localhost:5002/api/cars';
-        const response = await fetch(`${carApiUrl}?featured=true`);
-        if (response.ok) {
-          const data = await response.json();
-          setFeaturedCars(data);
-        }
-      } catch (error) {
-        console.error('Error fetching featured cars:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFeaturedCars();
-  }, []);
 
   // Auto-play logic
   useEffect(() => {
@@ -132,7 +113,7 @@ const HeroSection = () => {
             </>
           ) : (
             <>
-              {loading ? <div className="hero-loading-text"></div> : <p style={{color: 'white'}}>No cars available.</p>}
+              {(!initialFeaturedCars || initialFeaturedCars.length === 0) ? <p style={{color: 'white'}}>No cars available.</p> : null}
             </>
           )}
 

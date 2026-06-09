@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import CarCard from './CarCard';
 import './MostSearchedCars.css';
@@ -14,7 +15,9 @@ const MostSearchedCars = () => {
     const fetchCars = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/api/cars/category/${activeCategory}`);
+        const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://localhost:5002/api/cars';
+        // Note: The original code used port 5000 and /api/cars/category. Let's ensure it hits the correct backend.
+        const res = await fetch(`${carApiUrl}/category/${activeCategory}`);
         const data = await res.json();
         setCars(data);
       } catch (error) {

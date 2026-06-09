@@ -1,5 +1,6 @@
+"use client";
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { FiSearch, FiHeart, FiUser, FiMapPin, FiShoppingBag, FiActivity, FiTruck, FiHome, FiSettings, FiLogOut } from 'react-icons/fi';
 import { AuthContext } from '../context/AuthContext';
 import './Header.css';
@@ -11,7 +12,7 @@ const Header = () => {
     <header className="header">
       <div className="header-top">
         <div className="container header-top-container">
-          <Link to="/" className="logo-container" style={{ textDecoration: 'none' }}>
+          <Link href="/" className="logo-container" style={{ textDecoration: 'none' }}>
             <div className="logo-icon"></div>
             <h1 className="logo-text">ApniGaadiDekho<span>.com</span></h1>
           </Link>
@@ -55,7 +56,7 @@ const Header = () => {
                 </div>
               </div>
             ) : (
-              <Link to="/login" className="action-item login-register" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Link href="/login" className="action-item login-register" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <FiUser size={20} />
                 <span>Login / Register</span>
               </Link>
