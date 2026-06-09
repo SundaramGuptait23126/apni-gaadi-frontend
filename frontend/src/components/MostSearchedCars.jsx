@@ -32,7 +32,7 @@ const MostSearchedCars = () => {
 
   return (
     <section className="most-searched-section">
-      <div className="container">
+      <div className="container box-container">
         <h2 className="section-title">The most searched cars</h2>
         
         <div className="category-tabs">
