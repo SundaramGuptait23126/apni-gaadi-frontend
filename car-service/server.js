@@ -28,6 +28,15 @@ app.get('/', (req, res) => {
     res.send('Car Service is running...');
 });
 
+// Global Error Handler (catches multer/cloudinary errors and returns JSON instead of HTML crash)
+app.use((err, req, res, next) => {
+    console.error('Express Error Handler:', err);
+    res.status(500).json({ 
+        message: err.message || 'Internal Server Error in Middleware',
+        error: err.name
+    });
+});
+
 // Start Server
 app.listen(PORT, () => {
     console.log(`Car Service running on port ${PORT}`);
