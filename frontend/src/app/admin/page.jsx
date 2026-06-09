@@ -98,7 +98,7 @@ const AdminDashboard = () => {
       }
     } catch (error) {
       console.error('Error uploading car:', error);
-      setMessage({ type: 'error', text: 'Network error. Make sure car-service is running on port 5002.' });
+      setMessage({ type: 'error', text: `Upload Error: ${error.message}. Please check Console (F12) for details.` });
     } finally {
       setLoading(false);
     }
