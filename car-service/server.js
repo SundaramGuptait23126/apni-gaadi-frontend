@@ -7,6 +7,7 @@ dotenv.config();
 
 // We must load connectDB AFTER dotenv so process.env.MONGO_URI is ready
 const connectDB = require('./config/db');
+const { connectValkey } = require('./config/valkeyClient');
 const carRoutes = require('./routes/carRoutes');
 
 const app = express();
@@ -16,8 +17,9 @@ const PORT = process.env.PORT || 5002;
 app.use(cors());
 app.use(express.json());
 
-// Connect Database
+// Connect Database & Cache
 connectDB();
+connectValkey();
 
 // Routes
 app.use('/api/cars', carRoutes);
