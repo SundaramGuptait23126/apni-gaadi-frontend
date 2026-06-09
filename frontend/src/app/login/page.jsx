@@ -2,7 +2,7 @@
 import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext, authApiUrl } from '../../context/AuthContext';
 import './Login.css';
 
 const Login = () => {
@@ -20,7 +20,7 @@ const Login = () => {
         setLoading(true);
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_AUTH_API_URL}/login`, {
+            const response = await fetch(`${authApiUrl}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
