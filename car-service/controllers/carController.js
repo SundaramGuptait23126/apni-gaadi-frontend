@@ -48,6 +48,9 @@ const addCar = async (req, res) => {
         res.status(201).json({ message: 'Car added successfully', car: newCar });
     } catch (error) {
         console.error('Error adding car:', error);
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ message: error.message });
+        }
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
