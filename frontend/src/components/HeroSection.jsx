@@ -46,14 +46,14 @@ const HeroSection = () => {
       <div className="hero-background">
         {activeCar ? (
           <img 
-            src={optimizeCloudinaryUrl(activeCar.imageUrl, 1600)} 
+            src={optimizeCloudinaryUrl(activeCar.imageUrl, 1200)} 
             alt={activeCar.name} 
             className="hero-image fade-in"
             fetchPriority="high"
             loading="eager"
           />
         ) : (
-          <div className="hero-image-placeholder" style={{ backgroundColor: '#333', width: '100%', height: '100%' }}></div>
+          <div className="hero-image-placeholder"></div>
         )}
         <div className="hero-overlay"></div>
       </div>

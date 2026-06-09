@@ -1,4 +1,4 @@
-export const optimizeCloudinaryUrl = (url, width = 800) => {
+export const optimizeCloudinaryUrl = (url, width = 800, quality = 'q_auto:low') => {
   if (!url || !url.includes('cloudinary.com')) return url;
   
   // Check if transformations are already present to avoid duplicates
@@ -6,7 +6,7 @@ export const optimizeCloudinaryUrl = (url, width = 800) => {
 
   const parts = url.split('/upload/');
   if (parts.length === 2) {
-    return `${parts[0]}/upload/f_auto,q_auto,w_${width}/${parts[1]}`;
+    return `${parts[0]}/upload/f_auto,${quality},w_${width}/${parts[1]}`;
   }
   return url;
 };
