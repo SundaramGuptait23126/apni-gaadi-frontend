@@ -8,6 +8,11 @@ const carSchema = new mongoose.Schema({
     type: { type: String, enum: ['New', 'Used'], default: 'New' },
     category: { type: String, enum: ['Most Searched Cars', 'Electric Cars', 'Latest Cars', 'Upcoming Cars'], required: true },
     subCategory: { type: String, enum: ['SUV', 'Hatchback', 'Sedan', 'MUV', 'Luxury'] },
+    fuelType: { type: String, enum: ['Petrol', 'Diesel', 'CNG', 'Electric'], default: 'Petrol' },
+    transmission: { type: String, enum: ['Manual', 'Automatic'], default: 'Manual' },
+    engine: { type: String },
+    groundClearance: { type: String },
+    seatingCapacity: { type: String },
     imageUrl: { type: String, required: true },
     isFeatured: { type: Boolean, default: false }
 }, { timestamps: true });

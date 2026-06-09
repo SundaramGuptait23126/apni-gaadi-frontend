@@ -18,6 +18,11 @@ const AdminDashboard = () => {
     type: 'New',
     category: 'Most Searched Cars',
     subCategory: 'SUV',
+    fuelType: 'Petrol',
+    transmission: 'Manual',
+    engine: '',
+    groundClearance: '',
+    seatingCapacity: '',
     isFeatured: true
   });
   const [image, setImage] = useState(null);
@@ -65,6 +70,11 @@ const AdminDashboard = () => {
     data.append('type', formData.type);
     data.append('category', formData.category);
     data.append('subCategory', formData.subCategory);
+    data.append('fuelType', formData.fuelType);
+    data.append('transmission', formData.transmission);
+    data.append('engine', formData.engine);
+    data.append('groundClearance', formData.groundClearance);
+    data.append('seatingCapacity', formData.seatingCapacity);
     data.append('isFeatured', formData.isFeatured);
     data.append('image', image);
 
@@ -80,7 +90,7 @@ const AdminDashboard = () => {
       if (response.ok) {
         setMessage({ type: 'success', text: 'Car uploaded successfully! It is now live in the database and Cloudinary.' });
         // Reset form
-        setFormData({ name: '', brand: '', tagline: '', budget: '', type: 'New', category: 'Most Searched Cars', subCategory: 'SUV', isFeatured: true });
+        setFormData({ name: '', brand: '', tagline: '', budget: '', type: 'New', category: 'Most Searched Cars', subCategory: 'SUV', fuelType: 'Petrol', transmission: 'Manual', engine: '', groundClearance: '', seatingCapacity: '', isFeatured: true });
         setImage(null);
         e.target.reset();
       } else {
@@ -153,6 +163,39 @@ const AdminDashboard = () => {
                 <option key={sub} value={sub}>{sub}</option>
               ))}
             </select>
+          </div>
+
+          <div className="form-group">
+            <label>Fuel Type</label>
+            <select name="fuelType" value={formData.fuelType} onChange={handleChange}>
+              <option value="Petrol">Petrol</option>
+              <option value="Diesel">Diesel</option>
+              <option value="CNG">CNG</option>
+              <option value="Electric">Electric</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Transmission</label>
+            <select name="transmission" value={formData.transmission} onChange={handleChange}>
+              <option value="Manual">Manual</option>
+              <option value="Automatic">Automatic</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label>Engine Capacity (e.g., 1497 cc)</label>
+            <input type="text" name="engine" value={formData.engine} onChange={handleChange} placeholder="e.g. 1497 cc" />
+          </div>
+
+          <div className="form-group">
+            <label>Ground Clearance (e.g., 205 mm)</label>
+            <input type="text" name="groundClearance" value={formData.groundClearance} onChange={handleChange} placeholder="e.g. 205 mm" />
+          </div>
+
+          <div className="form-group">
+            <label>Seating Capacity (e.g., 5 Seater)</label>
+            <input type="text" name="seatingCapacity" value={formData.seatingCapacity} onChange={handleChange} placeholder="e.g. 5 Seater" />
           </div>
 
           <div className="form-group">

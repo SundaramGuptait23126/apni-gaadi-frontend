@@ -4,7 +4,7 @@ const { getValkeyClient } = require('../config/valkeyClient');
 // Add a new car (with image upload)
 const addCar = async (req, res) => {
     try {
-        const { name, brand, tagline, budget, type, category, subCategory, isFeatured } = req.body;
+        const { name, brand, tagline, budget, type, category, subCategory, fuelType, transmission, engine, groundClearance, seatingCapacity, isFeatured } = req.body;
         
         // If image uploaded successfully, multer puts the secure URL in req.file.path
         if (!req.file) {
@@ -21,6 +21,11 @@ const addCar = async (req, res) => {
             type,
             category,
             subCategory,
+            fuelType,
+            transmission,
+            engine,
+            groundClearance,
+            seatingCapacity,
             imageUrl,
             isFeatured: isFeatured === 'true' || isFeatured === true
         });
@@ -152,4 +157,43 @@ const getCarsByCategory = async (req, res) => {
     }
 };
 
-module.exports = { addCar, getCars, getCarsByCategory };
+// Fetch a single car by ID
+const getCarById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const cacheKey = `car_${id}`;
+        const valkeyClient = getValkeyClient();
+
+        if (valkeyClient) {
+            try {
+                const cachedCar = await valkeyClient.get(cacheKey);
+                if (cachedCar) {
+                    console.log(`Serving ${cacheKey} from Valkey cache`);
+                    return res.status(200).json(JSON.parse(cachedCar));
+                }
+            } catch (err) {
+                console.error('Cache read error:', err);
+            }
+        }
+
+        const car = await Car.findById(id);
+        if (!car) {
+            return res.status(404).json({ message: 'Car not found' });
+        }
+
+        if (valkeyClient) {
+            try {
+                await valkeyClient.setEx(cacheKey, 3600, JSON.stringify(car));
+            } catch (err) {
+                console.error('Cache write error:', err);
+            }
+        }
+
+        res.status(200).json(car);
+    } catch (error) {
+        console.error('Error fetching car by id:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+module.exports = { addCar, getCars, getCarsByCategory, getCarById };
