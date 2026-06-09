@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import './HeroSection.css';
 import { optimizeCloudinaryUrl } from '../utils/imageUtils';
+import heroImg from '../assets/hero.png';
 
 const HeroSection = () => {
   const [carType, setCarType] = useState('new');
   const [searchBy, setSearchBy] = useState('budget');
   
-  // New state for dynamic carousel
-  const [featuredCars, setFeaturedCars] = useState([]);
+  const fallbackCar = {
+    _id: 'default',
+    name: 'Featured Car',
+    brand: 'Premium',
+    budget: 'Starting at ₹ 10 Lakh',
+    tagline: 'Experience the thrill',
+    imageUrl: heroImg
+  };
+
+  // Set the local fast-loading image as default so the user sees it instantly
+  const [featuredCars, setFeaturedCars] = useState([fallbackCar]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchFeaturedCars = async () => {
@@ -18,12 +27,13 @@ const HeroSection = () => {
         const response = await fetch(`${carApiUrl}?featured=true`);
         if (response.ok) {
           const data = await response.json();
-          setFeaturedCars(data);
+          // Only replace the fast local image if the database actually has cars
+          if (data && data.length > 0) {
+            setFeaturedCars(data);
+          }
         }
       } catch (error) {
         console.error('Error fetching featured cars:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -131,11 +141,7 @@ const HeroSection = () => {
               <p className="featured-subtitle">{activeCar.tagline || activeCar.brand}</p>
               <button className="btn-outline hero-know-more">Know More</button>
             </>
-          ) : (
-            <>
-              {loading ? <p style={{color: 'white'}}>Loading Cars...</p> : <p style={{color: 'white'}}>No cars available.</p>}
-            </>
-          )}
+          ) : null}
 
           {featuredCars.length > 0 && (
             <div className="featured-nav">
