@@ -22,7 +22,21 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', token);
     };
 
-    const logout = () => {
+    const logout = async () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                await fetch(`${authApiUrl}/logout`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } catch (error) {
+                console.error("Logout request failed", error);
+            }
+        }
         setUser(null);
         localStorage.removeItem('user');
         localStorage.removeItem('token');
