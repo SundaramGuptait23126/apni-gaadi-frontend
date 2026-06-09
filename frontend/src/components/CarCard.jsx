@@ -1,11 +1,17 @@
 import React from 'react';
 import './CarCard.css';
+import { optimizeCloudinaryUrl } from '../utils/imageUtils';
 
 const CarCard = ({ car }) => {
   return (
     <div className="car-card">
       <div className="car-image-container">
-        <img src={car.image} alt={car.name} className="car-image" />
+        <img 
+          src={optimizeCloudinaryUrl(car.imageUrl || car.image, 400)} 
+          alt={car.name} 
+          className="car-image" 
+          loading="lazy"
+        />
       </div>
       <div className="car-details">
         <h3 className="car-name">{car.name}</h3>

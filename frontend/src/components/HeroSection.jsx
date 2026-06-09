@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './HeroSection.css';
+import { optimizeCloudinaryUrl } from '../utils/imageUtils';
 
 const HeroSection = () => {
   const [carType, setCarType] = useState('new');
@@ -45,9 +46,11 @@ const HeroSection = () => {
       <div className="hero-background">
         {activeCar ? (
           <img 
-            src={activeCar.imageUrl} 
+            src={optimizeCloudinaryUrl(activeCar.imageUrl, 1600)} 
             alt={activeCar.name} 
             className="hero-image fade-in"
+            fetchPriority="high"
+            loading="eager"
           />
         ) : (
           <div className="hero-image-placeholder" style={{ backgroundColor: '#333', width: '100%', height: '100%' }}></div>
