@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { FiHeart, FiShare2, FiSettings, FiMaximize, FiShield } from 'react-icons/fi';
-import { BsFuelPump, BsLightningCharge, BsGearWide } from 'react-icons/bs';
+import { FiHeart, FiShare2, FiSettings, FiMaximize, FiShield, FiTag, FiList } from 'react-icons/fi';
+import { BsFuelPump, BsLightningCharge, BsGearWide, BsCarFront } from 'react-icons/bs';
 import { MdOutlineAirlineSeatReclineNormal } from 'react-icons/md';
 import './CarDetail.css';
 
@@ -104,6 +104,24 @@ const CarDetail = () => {
           </div>
           
           <div className="specs-grid">
+            <div className="spec-item">
+              <span className="spec-label"><FiTag /> Brand</span>
+              <span className="spec-value">{car.brand || 'N/A'}</span>
+            </div>
+            <div className="spec-item">
+              <span className="spec-label"><BsCarFront /> Type</span>
+              <span className="spec-value">{car.type || 'New'}</span>
+            </div>
+            <div className="spec-item">
+              <span className="spec-label"><FiList /> Category</span>
+              <span className="spec-value">{car.category || 'N/A'}</span>
+            </div>
+            {car.subCategory && (
+              <div className="spec-item">
+                <span className="spec-label"><FiList /> Sub Category</span>
+                <span className="spec-value">{car.subCategory}</span>
+              </div>
+            )}
             <div className="spec-item">
               <span className="spec-label"><FiSettings /> Engine</span>
               <span className="spec-value">{car.engine || 'N/A'}</span>
