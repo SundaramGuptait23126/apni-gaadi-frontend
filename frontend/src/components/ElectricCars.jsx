@@ -4,11 +4,8 @@ import CarCard from './CarCard';
 import './MostSearchedCars.css';
 
 const ElectricCars = () => {
-  const [activeCategory, setActiveCategory] = useState('SUV');
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const categories = ['SUV', 'Hatchback', 'Sedan', 'MUV', 'Luxury'];
 
   useEffect(() => {
     // Fetch from backend
@@ -16,7 +13,7 @@ const ElectricCars = () => {
       setLoading(true);
       try {
         const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://localhost:5002/api/cars';
-        const res = await fetch(`${carApiUrl}/category/Electric%20Cars?subCategory=${activeCategory}`);
+        const res = await fetch(`${carApiUrl}/category/Electric%20Cars`);
         const data = await res.json();
         setCars(data);
       } catch (error) {
@@ -27,24 +24,14 @@ const ElectricCars = () => {
     };
 
     fetchCars();
-  }, [activeCategory]);
+  }, []);
 
   return (
     <section className="most-searched-section">
       <div className="container box-container">
         <h2 className="section-title">Electric Cars</h2>
         
-        <div className="category-tabs">
-          {categories.map(cat => (
-            <button 
-              key={cat}
-              className={`category-tab ${activeCategory === cat ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat)}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+
 
         <div className="cars-carousel-wrapper">
           {loading ? (
@@ -65,7 +52,7 @@ const ElectricCars = () => {
         </div>
 
         <div className="view-all-link">
-          <a href="#">View All {activeCategory} Electric Cars <span className="arrow">→</span></a>
+          <a href="#">View All Electric Cars <span className="arrow">→</span></a>
         </div>
       </div>
     </section>
