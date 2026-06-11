@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import MostSearchedCars from './components/MostSearchedCars';
+import ElectricCars from './components/ElectricCars';
 import Footer from './components/Footer';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -13,6 +14,7 @@ const Home = () => (
   <main>
     <HeroSection />
     <MostSearchedCars />
+    <ElectricCars />
   </main>
 );
 

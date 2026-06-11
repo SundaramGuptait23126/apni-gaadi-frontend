@@ -1,5 +1,6 @@
 import HeroSection from '../components/HeroSection';
 import MostSearchedCars from '../components/MostSearchedCars';
+import ElectricCars from '../components/ElectricCars';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,6 +20,7 @@ export default async function HomePage() {
     <main>
       <HeroSection initialFeaturedCars={featuredCars} />
       <MostSearchedCars />
+      <ElectricCars />
     </main>
   );
 }
