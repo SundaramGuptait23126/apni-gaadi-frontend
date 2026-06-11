@@ -1,44 +1,34 @@
-"use client";
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
 import { FiHeart, FiShare2, FiSettings, FiMaximize, FiShield, FiTag, FiList } from 'react-icons/fi';
 import { BsFuelPump, BsLightningCharge, BsGearWide, BsCarFront } from 'react-icons/bs';
 import { MdOutlineAirlineSeatReclineNormal } from 'react-icons/md';
 import './CarDetail.css';
 
-const CarDetail = () => {
-  const { id } = useParams();
-  const [car, setCar] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+async function getCar(id) {
+  try {
+    const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://localhost:5002/api/cars';
+    const res = await fetch(`${carApiUrl}/${id}`, { cache: 'no-store' });
+    if (!res.ok) {
+      return null;
+    }
+    return await res.json();
+  } catch (err) {
+    console.error('Error fetching car:', err);
+    return null;
+  }
+}
 
-  useEffect(() => {
-    const fetchCar = async () => {
-      try {
-        const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://localhost:5002/api/cars';
-        const res = await fetch(`${carApiUrl}/${id}`);
-        if (!res.ok) {
-          throw new Error('Car not found');
-        }
-        const data = await res.json();
-        setCar(data);
-      } catch (err) {
-        console.error('Error fetching car:', err);
-        setError('Unable to load car details.');
-      } finally {
-        setLoading(false);
-      }
-    };
+export default async function CarDetail({ params }) {
+  const resolvedParams = await params;
+  const id = resolvedParams?.id;
 
-    if (id) fetchCar();
-  }, [id]);
-
-  if (loading) {
-    return <div className="car-detail-loading">Loading amazing details...</div>;
+  if (!id) {
+    return <div className="car-detail-error">Car not found.</div>;
   }
 
-  if (error || !car) {
-    return <div className="car-detail-error">{error || 'Car not found.'}</div>;
+  const car = await getCar(id);
+
+  if (!car) {
+    return <div className="car-detail-error">Car not found.</div>;
   }
 
   return (
