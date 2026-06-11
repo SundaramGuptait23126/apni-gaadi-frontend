@@ -1,0 +1,78 @@
+/* [project]/Desktop/apnigadidekhoproject/frontend/src/components/CarCard.css [app-client] (css) */
+.car-card {
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  flex-direction: column;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+}
+
+.car-card:hover {
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+  transform: translateY(-5px);
+}
+
+.car-image-container {
+  background-color: #e8e8e8;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 180px;
+  display: flex;
+  overflow: hidden;
+}
+
+.car-image {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  transition: transform .5s;
+}
+
+.car-card:hover .car-image {
+  transform: scale(1.05);
+}
+
+.car-details {
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+}
+
+.car-name {
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.car-price {
+  color: var(--text-dark);
+  margin-bottom: 20px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.view-offers-btn {
+  width: 100%;
+  color: var(--primary-color, #f06a4b);
+  border: 1px solid var(--primary-color, #f06a4b);
+  cursor: pointer;
+  background-color: #0000;
+  border-radius: 4px;
+  margin-top: auto;
+  padding: 10px;
+  font-weight: 500;
+  transition: all .3s;
+}
+
+.view-offers-btn:hover {
+  background-color: #f06a4b0d;
+}
+
+/*# sourceMappingURL=Desktop_apnigadidekhoproject_frontend_src_components_CarCard_css_1igg3k2._.single.css.map*/

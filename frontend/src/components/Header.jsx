@@ -69,8 +69,9 @@ const Header = () => {
         <div className="container header-bottom-container">
           <nav className="main-nav">
             <ul>
-              <li>NEW CARS ▾</li>
+              <li><Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>NEW CARS</Link> ▾</li>
               <li>USED CARS ▾</li>
+              <li><Link href="/compare" style={{ textDecoration: 'none', color: 'inherit' }}>COMPARE CARS</Link></li>
               <li>NEWS & REVIEWS ▾</li>
               <li>VIDEOS ▾</li>
             </ul>
