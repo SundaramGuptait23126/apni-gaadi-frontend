@@ -1,0 +1,58 @@
+name: Car Service CI/CD
+
+# 1. Trigger (Kab chalegi yeh script?)
+# Yeh pipeline sirf tab chalegi jab 'main' branch par code push hoga
+# aur sirf tab jab 'car-service' folder ke andar koi badlaav aayega.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'car-service/**'
+
+jobs:
+  # 2. CI (Continuous Integration) - Testing ka phase
+  build-and-test:
+    name: Check Code Errors
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step A: GitHub se aapka naya code is Virtual Machine mein download karo
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step B: Node.js install karo (version 20)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Step C: 'car-service' folder mein jaakar dependencies install karo
+      - name: Install Dependencies
+        working-directory: ./car-service
+        run: npm install
+
+      # Step D: Test run karo (Syntax errors check karega)
+      - name: Run Syntax Check (Test)
+        working-directory: ./car-service
+        run: npm test
+
+  # 3. CD (Continuous Deployment) - Live server par bhejne ka phase
+  deploy:
+    name: Deploy to Render
+    # 'needs' ka matlab hai ki deploy tabhi chalega jab upar wala 'build-and-test' paas ho jayega!
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Render ke Deploy Hook URL ko hit karna
+      # GitHub Secrets se RENDER_DEPLOY_HOOK laakar uspar ek signal bhejo
+      - name: Trigger Render Deployment
+        run: |
+          if [ -z "${{ secrets.RENDER_DEPLOY_HOOK }}" ]; then
+            echo "Error: RENDER_DEPLOY_HOOK secret is not set in GitHub repository settings!"
+            exit 1
+          fi
+          echo "Triggering deployment on Render..."
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+          echo "Deployment triggered successfully!"
