@@ -1,0 +1,41 @@
+name: Compare Car Service CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'compare-car-service/**'
+
+jobs:
+  build-and-test:
+    name: Check Code Errors
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Dependencies
+        working-directory: ./compare-car-service
+        run: npm install
+      - name: Run Syntax Check (Test)
+        working-directory: ./compare-car-service
+        run: npm test
+
+  deploy:
+    name: Deploy to Render
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deployment
+        run: |
+          if [ -z "${{ secrets.RENDER_DEPLOY_HOOK_COMPARE }}" ]; then
+            echo "Error: RENDER_DEPLOY_HOOK_COMPARE secret is not set!"
+            exit 1
+          fi
+          echo "Triggering deployment on Render..."
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_COMPARE }}"
+          echo "Deployment triggered successfully!"
