@@ -202,7 +202,7 @@ const AdminDashboard = () => {
           </div>
 
           <div className="form-group">
-            <label>Upload Car Images (Select multiple JPG, PNG, WEBP)</label>
+            <label>Upload Car Images (Select multiple JPG, PNG, WEBP, AVIF)</label>
             <input type="file" accept="image/*" multiple onChange={handleFileChange} required />
           </div>
 
