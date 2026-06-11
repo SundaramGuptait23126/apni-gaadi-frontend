@@ -48,8 +48,17 @@ export default async function CarDetail({ params }) {
       <div className="car-detail-hero">
         <div className="car-image-section">
           <img src={car.imageUrl} alt={car.name} className="main-car-image" />
+          
+          {car.images && car.images.length > 1 && (
+            <div className="thumbnail-gallery">
+              {car.images.map((img, index) => (
+                <img key={index} src={img} alt={`${car.name} - ${index + 1}`} className="thumbnail-image" />
+              ))}
+            </div>
+          )}
+
           <div className="image-tags">
-            <span className="tag">📷 98 Photos</span>
+            <span className="tag">📷 {car.images ? car.images.length : 1} Photos</span>
             <span className="tag">🎥 Shorts</span>
             <span className="tag">🎨 6 Colors</span>
           </div>

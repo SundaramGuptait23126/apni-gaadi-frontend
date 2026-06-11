@@ -25,7 +25,7 @@ const AdminDashboard = () => {
     seatingCapacity: '',
     isFeatured: true
   });
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
@@ -49,13 +49,13 @@ const AdminDashboard = () => {
   };
 
   const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
+    setImages(e.target.files);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!image) {
-      setMessage({ type: 'error', text: 'Please select an image file to upload.' });
+    if (!images || images.length === 0) {
+      setMessage({ type: 'error', text: 'Please select at least one image file to upload.' });
       return;
     }
 
@@ -76,7 +76,7 @@ const AdminDashboard = () => {
     data.append('groundClearance', formData.groundClearance);
     data.append('seatingCapacity', formData.seatingCapacity);
     data.append('isFeatured', formData.isFeatured);
-    data.append('image', image);
+    Array.from(images).forEach(file => data.append('images', file));
 
     try {
       const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://localhost:5002/api/cars';
@@ -91,7 +91,7 @@ const AdminDashboard = () => {
         setMessage({ type: 'success', text: 'Car uploaded successfully! It is now live in the database and Cloudinary.' });
         // Reset form
         setFormData({ name: '', brand: '', tagline: '', budget: '', type: 'New', category: 'Most Searched Cars', subCategory: 'SUV', fuelType: 'Petrol', transmission: 'Manual', engine: '', groundClearance: '', seatingCapacity: '', isFeatured: true });
-        setImage(null);
+        setImages([]);
         e.target.reset();
       } else {
         setMessage({ type: 'error', text: result.message || 'Upload failed' });
@@ -202,8 +202,8 @@ const AdminDashboard = () => {
           </div>
 
           <div className="form-group">
-            <label>Upload Car Image (JPG, PNG, WEBP)</label>
-            <input type="file" accept="image/*" onChange={handleFileChange} required />
+            <label>Upload Car Images (Select multiple JPG, PNG, WEBP)</label>
+            <input type="file" accept="image/*" multiple onChange={handleFileChange} required />
           </div>
 
           <div className="form-group checkbox-group">

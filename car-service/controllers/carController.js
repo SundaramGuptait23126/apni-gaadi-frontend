@@ -6,12 +6,13 @@ const addCar = async (req, res) => {
     try {
         const { name, brand, tagline, budget, type, category, subCategory, fuelType, transmission, engine, groundClearance, seatingCapacity, isFeatured } = req.body;
         
-        // If image uploaded successfully, multer puts the secure URL in req.file.path
-        if (!req.file) {
+        // If images uploaded successfully, multer puts them in req.files
+        if (!req.files || req.files.length === 0) {
             return res.status(400).json({ message: 'No image uploaded' });
         }
         
-        const imageUrl = req.file.path; // Cloudinary URL
+        const images = req.files.map(file => file.path); // Array of Cloudinary URLs
+        const imageUrl = images[0]; // Primary image
 
         const newCar = new Car({
             name,
@@ -27,6 +28,7 @@ const addCar = async (req, res) => {
             groundClearance,
             seatingCapacity,
             imageUrl,
+            images,
             isFeatured: isFeatured === 'true' || isFeatured === true
         });
 
