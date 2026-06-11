@@ -148,6 +148,4 @@ export default async function CarDetail({ params }) {
       </div>
     </div>
   );
-};
-
-export default CarDetail;
+}
