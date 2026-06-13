@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build: ./auth-service
+    container_name: apni-gaadi-auth-service
+    network_mode: "host"
+    env_file:
+      - ./auth-service/.env
+    restart: unless-stopped
+
+  car-service:
+    build: ./car-service
+    container_name: apni-gaadi-car-service
+    network_mode: "host"
+    env_file:
+      - ./car-service/.env
+    restart: unless-stopped
+
+  compare-car-service:
+    build: ./compare-car-service
+    container_name: apni-gaadi-compare-car-service
+    network_mode: "host"
+    env_file:
+      - ./compare-car-service/.env
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: apni-gaadi-frontend
+    network_mode: "host"
+    env_file:
+      - ./frontend/.env
+    restart: unless-stopped
