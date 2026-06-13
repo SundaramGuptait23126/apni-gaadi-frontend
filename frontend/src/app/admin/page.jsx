@@ -25,7 +25,8 @@ const AdminDashboard = () => {
     seatingCapacity: '',
     isFeatured: true
   });
-  const [images, setImages] = useState([]);
+  const [exteriorImages, setExteriorImages] = useState([]);
+  const [interiorImages, setInteriorImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
@@ -48,14 +49,18 @@ const AdminDashboard = () => {
     });
   };
 
-  const handleFileChange = (e) => {
-    setImages(e.target.files);
+  const handleExteriorChange = (e) => {
+    setExteriorImages(e.target.files);
+  };
+
+  const handleInteriorChange = (e) => {
+    setInteriorImages(e.target.files);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!images || images.length === 0) {
-      setMessage({ type: 'error', text: 'Please select at least one image file to upload.' });
+    if ((!exteriorImages || exteriorImages.length === 0) && (!interiorImages || interiorImages.length === 0)) {
+      setMessage({ type: 'error', text: 'Please select at least one image file to upload (Exterior or Interior).' });
       return;
     }
 
@@ -76,7 +81,8 @@ const AdminDashboard = () => {
     data.append('groundClearance', formData.groundClearance);
     data.append('seatingCapacity', formData.seatingCapacity);
     data.append('isFeatured', formData.isFeatured);
-    Array.from(images).forEach(file => data.append('images', file));
+    Array.from(exteriorImages).forEach(file => data.append('exteriorImages', file));
+    Array.from(interiorImages).forEach(file => data.append('interiorImages', file));
 
     try {
       const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://localhost:5002/api/cars';
@@ -91,7 +97,8 @@ const AdminDashboard = () => {
         setMessage({ type: 'success', text: 'Car uploaded successfully! It is now live in the database and Cloudinary.' });
         // Reset form
         setFormData({ name: '', brand: '', tagline: '', budget: '', type: 'New', category: 'Most Searched Cars', subCategory: 'SUV', fuelType: 'Petrol', transmission: 'Manual', engine: '', groundClearance: '', seatingCapacity: '', isFeatured: true });
-        setImages([]);
+        setExteriorImages([]);
+        setInteriorImages([]);
         e.target.reset();
       } else {
         setMessage({ type: 'error', text: result.message || 'Upload failed' });
@@ -202,8 +209,13 @@ const AdminDashboard = () => {
           </div>
 
           <div className="form-group">
-            <label>Upload Car Images (Select multiple JPG, PNG, WEBP, AVIF)</label>
-            <input type="file" accept="image/*" multiple onChange={handleFileChange} required />
+            <label>Upload Exterior Images (Select multiple JPG, PNG, WEBP, AVIF)</label>
+            <input type="file" accept="image/*" multiple onChange={handleExteriorChange} />
+          </div>
+
+          <div className="form-group">
+            <label>Upload Interior Images (Select multiple JPG, PNG, WEBP, AVIF)</label>
+            <input type="file" accept="image/*" multiple onChange={handleInteriorChange} />
           </div>
 
           <div className="form-group checkbox-group">

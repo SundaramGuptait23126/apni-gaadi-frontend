@@ -1,0 +1,21 @@
+version: '3.8'
+
+# Services block mein hum apne saare tiffin boxes (containers) define karte hain
+services:
+  car-service:
+    # Konsa folder build karna hai?
+    build: ./car-service
+    
+    # Container ka naam kya rakhein?
+    container_name: apni-gaadi-car-service
+    
+    # Laptop ka konsa port Container ke kis port se jodna hai? (HostPort:ContainerPort)
+    ports:
+      - "5002:5002"
+    
+    # Environment variables hum local .env se utha sakte hain
+    env_file:
+      - ./car-service/.env
+    
+    # Agar code mein crash ho toh aage kya karna hai?
+    restart: unless-stopped

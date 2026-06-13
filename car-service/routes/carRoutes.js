@@ -13,7 +13,10 @@ router.get('/category/:category', getCarsByCategory);
 // Route to fetch a single car by ID
 router.get('/:id', getCarById);
 
-// Route to add a car (Expects 'images' array in multipart/form-data)
-router.post('/', upload.array('images', 10), addCar);
+// Route to add a car (Expects 'exteriorImages' and 'interiorImages' arrays in multipart/form-data)
+router.post('/', upload.fields([
+    { name: 'exteriorImages', maxCount: 15 },
+    { name: 'interiorImages', maxCount: 15 }
+]), addCar);
 
 module.exports = router;

@@ -6,13 +6,21 @@ const addCar = async (req, res) => {
     try {
         const { name, brand, tagline, budget, type, category, subCategory, fuelType, transmission, engine, groundClearance, seatingCapacity, isFeatured } = req.body;
         
-        // If images uploaded successfully, multer puts them in req.files
-        if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ message: 'No image uploaded' });
+        // multer puts uploaded files in req.files (an object when using upload.fields)
+        const exteriorImagesFiles = req.files && req.files['exteriorImages'] ? req.files['exteriorImages'] : [];
+        const interiorImagesFiles = req.files && req.files['interiorImages'] ? req.files['interiorImages'] : [];
+
+        if (exteriorImagesFiles.length === 0 && interiorImagesFiles.length === 0) {
+            return res.status(400).json({ message: 'No images uploaded' });
         }
         
-        const images = req.files.map(file => file.path); // Array of Cloudinary URLs
-        const imageUrl = images[0]; // Primary image
+        const exteriorImages = exteriorImagesFiles.map(file => file.path);
+        const interiorImages = interiorImagesFiles.map(file => file.path);
+        
+        // Primary image: first exterior image, or first interior if no exterior
+        const imageUrl = exteriorImages.length > 0 ? exteriorImages[0] : interiorImages[0];
+        // Keep a generic images array for backward compatibility if needed, combining both
+        const images = [...exteriorImages, ...interiorImages];
 
         const newCar = new Car({
             name,
@@ -29,6 +37,8 @@ const addCar = async (req, res) => {
             seatingCapacity,
             imageUrl,
             images,
+            exteriorImages,
+            interiorImages,
             isFeatured: isFeatured === 'true' || isFeatured === true
         });
 

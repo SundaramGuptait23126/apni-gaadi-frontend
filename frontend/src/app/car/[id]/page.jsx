@@ -2,6 +2,7 @@ import { FiHeart, FiShare2, FiSettings, FiMaximize, FiShield, FiTag, FiList } fr
 import { BsFuelPump, BsLightningCharge, BsGearWide, BsCarFront } from 'react-icons/bs';
 import { MdOutlineAirlineSeatReclineNormal } from 'react-icons/md';
 import './CarDetail.css';
+import CarImageGallery from '../../../components/CarImageGallery/CarImageGallery';
 
 async function getCar(id) {
   try {
@@ -46,23 +47,7 @@ export default async function CarDetail({ params }) {
       </div>
 
       <div className="car-detail-hero">
-        <div className="car-image-section">
-          <img src={car.imageUrl} alt={car.name} className="main-car-image" />
-          
-          {car.images && car.images.length > 1 && (
-            <div className="thumbnail-gallery">
-              {car.images.map((img, index) => (
-                <img key={index} src={img} alt={`${car.name} - ${index + 1}`} className="thumbnail-image" />
-              ))}
-            </div>
-          )}
-
-          <div className="image-tags">
-            <span className="tag">📷 {car.images ? car.images.length : 1} Photos</span>
-            <span className="tag">🎥 Shorts</span>
-            <span className="tag">🎨 6 Colors</span>
-          </div>
-        </div>
+        <CarImageGallery car={car} />
 
         <div className="car-info-section">
           <div className="car-title-row">

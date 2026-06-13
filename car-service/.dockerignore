@@ -1,0 +1,8 @@
+# .dockerignore file batati hai ki container banate waqt kin files ko ignore karna hai (taki size kam rahe).
+
+node_modules
+npm-debug.log
+.env
+.git
+.gitignore
+README.md

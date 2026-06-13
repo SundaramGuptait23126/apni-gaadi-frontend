@@ -15,6 +15,8 @@ const carSchema = new mongoose.Schema({
     seatingCapacity: { type: String },
     imageUrl: { type: String, required: true },
     images: [{ type: String }],
+    exteriorImages: [{ type: String }],
+    interiorImages: [{ type: String }],
     isFeatured: { type: Boolean, default: false }
 }, { timestamps: true });
 
