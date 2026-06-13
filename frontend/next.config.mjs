@@ -4,15 +4,15 @@ const nextConfig = {
     return [
       {
         source: '/api/auth/:path*',
-        destination: 'http://13.239.116.36:5001/api/auth/:path*',
+        destination: 'http://3.25.228.91:5001/api/auth/:path*',
       },
       {
         source: '/api/cars/:path*',
-        destination: 'http://13.239.116.36:5002/api/cars/:path*',
+        destination: 'http://3.25.228.91:5002/api/cars/:path*',
       },
       {
         source: '/api/compare/:path*',
-        destination: 'http://13.239.116.36:5003/api/compare/:path*',
+        destination: 'http://3.25.228.91:5003/api/compare/:path*',
       },
     ];
   },
