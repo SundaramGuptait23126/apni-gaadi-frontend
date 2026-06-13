@@ -50,13 +50,24 @@ const AdminDashboard = () => {
   };
 
   const handleExteriorChange = (e) => {
-    setExteriorImages(e.target.files);
+    if (e.target.files) {
+      setExteriorImages(prev => [...prev, ...Array.from(e.target.files)]);
+    }
   };
 
   const handleInteriorChange = (e) => {
-    setInteriorImages(e.target.files);
+    if (e.target.files) {
+      setInteriorImages(prev => [...prev, ...Array.from(e.target.files)]);
+    }
   };
 
+  const removeExteriorImage = (indexToRemove) => {
+    setExteriorImages(prev => prev.filter((_, index) => index !== indexToRemove));
+  };
+
+  const removeInteriorImage = (indexToRemove) => {
+    setInteriorImages(prev => prev.filter((_, index) => index !== indexToRemove));
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if ((!exteriorImages || exteriorImages.length === 0) && (!interiorImages || interiorImages.length === 0)) {
@@ -211,11 +222,37 @@ const AdminDashboard = () => {
           <div className="form-group">
             <label>Upload Exterior Images (Select multiple JPG, PNG, WEBP, AVIF)</label>
             <input type="file" accept="image/*" multiple onChange={handleExteriorChange} />
+            {exteriorImages.length > 0 && (
+              <div className="selected-files">
+                <p>Selected Exterior Images ({exteriorImages.length}):</p>
+                <ul>
+                  {exteriorImages.map((file, index) => (
+                    <li key={index}>
+                      {file.name} 
+                      <button type="button" onClick={() => removeExteriorImage(index)} style={{ color: 'red', marginLeft: '10px', fontSize: '12px' }}>Remove</button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           <div className="form-group">
             <label>Upload Interior Images (Select multiple JPG, PNG, WEBP, AVIF)</label>
             <input type="file" accept="image/*" multiple onChange={handleInteriorChange} />
+            {interiorImages.length > 0 && (
+              <div className="selected-files">
+                <p>Selected Interior Images ({interiorImages.length}):</p>
+                <ul>
+                  {interiorImages.map((file, index) => (
+                    <li key={index}>
+                      {file.name}
+                      <button type="button" onClick={() => removeInteriorImage(index)} style={{ color: 'red', marginLeft: '10px', fontSize: '12px' }}>Remove</button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           <div className="form-group checkbox-group">
