@@ -15,12 +15,6 @@ const CarCard = ({ car }) => {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
             loading="lazy"
           />
-          {/* Optional Badge */}
-          {car.tagline && (
-            <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 text-xs font-bold text-gray-800 rounded shadow-sm">
-              {car.tagline}
-            </div>
-          )}
         </div>
         
         {/* Content */}
