@@ -57,10 +57,10 @@ const MostSearchedCars = () => {
               Loading cars...
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 md:gap-6 md:grid md:grid-cols-2 lg:grid-cols-4 pb-4 md:pb-0">
               {cars.length > 0 ? (
                 cars.map(car => (
-                  <div key={car.id || car._id} className="animate-fade-in-up">
+                  <div key={car.id || car._id} className="animate-fade-in-up snap-center shrink-0 w-[75vw] sm:w-[45vw] md:w-auto">
                     <CarCard car={car} />
                   </div>
                 ))
