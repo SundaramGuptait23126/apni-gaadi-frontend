@@ -8,11 +8,11 @@ const CarCard = ({ car }) => {
       <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full transform hover:-translate-y-1">
         
         {/* Image Container */}
-        <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden">
+        <div className="relative w-full aspect-[4/3] bg-white overflow-hidden flex items-center justify-center p-4 border-b border-gray-100">
           <img 
             src={optimizeCloudinaryUrl(car.imageUrl || car.image, 400)} 
             alt={car.name} 
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" 
             loading="lazy"
           />
         </div>
