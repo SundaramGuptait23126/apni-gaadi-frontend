@@ -163,24 +163,37 @@ const HeroSection = ({ initialFeaturedCars }) => {
           MOBILE HERO LAYOUT 
           ======================= */}
       <section className="md:hidden w-full bg-white pb-8">
-        {/* Ad Banner Carousel placeholder */}
+        {/* Mobile Hero Carousel */}
         <div className="w-full px-4 pt-4 pb-2">
-          <div className="w-full aspect-[2/1] bg-gray-200 rounded-xl overflow-hidden relative shadow-sm">
-            <img 
-              src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80" 
-              alt="Car Ad" 
-              className="w-full h-full object-cover" 
-            />
-            {/* Ad badge */}
-            <div className="absolute top-2 right-2 bg-white/90 px-1.5 py-0.5 rounded text-[10px] font-bold text-gray-600">
-              Ad
-            </div>
-            {/* Dots */}
-            <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-[#eb512c]"></div>
-              <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-              <div className="w-2 h-2 rounded-full bg-gray-300"></div>
-            </div>
+          <div className="w-full aspect-[2/1] bg-gray-900 rounded-xl overflow-hidden relative shadow-sm">
+            {activeCar ? (
+              <>
+                <img 
+                  src={optimizeCloudinaryUrl(activeCar.imageUrl, 800)} 
+                  alt={activeCar.name} 
+                  className="w-full h-full object-cover opacity-90 transition-opacity duration-1000 ease-in-out" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div className="absolute bottom-5 left-3 right-3 text-white">
+                  <h3 className="font-bold text-lg leading-tight truncate drop-shadow-md">{activeCar.name}</h3>
+                  <p className="text-[10px] text-gray-200 truncate drop-shadow">{activeCar.tagline || activeCar.brand}</p>
+                </div>
+              </>
+            ) : (
+              <div className="w-full h-full bg-gray-800"></div>
+            )}
+            
+            {/* Carousel Dots */}
+            {featuredCars.length > 0 && (
+              <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5">
+                {featuredCars.map((_, idx) => (
+                  <div 
+                    key={idx} 
+                    className={`h-1.5 rounded-full transition-all duration-300 ${idx === activeIndex ? 'bg-primary w-4' : 'bg-white/50 w-1.5'}`}
+                  ></div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
