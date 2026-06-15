@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import CarCard from './CarCard';
-import './MostSearchedCars.css';
 
 const MostSearchedCars = () => {
   const [activeCategory, setActiveCategory] = useState('SUV');
@@ -16,7 +15,6 @@ const MostSearchedCars = () => {
       setLoading(true);
       try {
         const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://localhost:5002/api/cars';
-        // Note: The original code used port 5000 and /api/cars/category. Let's ensure it hits the correct backend.
         const res = await fetch(`${carApiUrl}/category/Most%20Searched%20Cars?subCategory=${activeCategory}`);
         const data = await res.json();
         setCars(data);
@@ -31,15 +29,19 @@ const MostSearchedCars = () => {
   }, [activeCategory]);
 
   return (
-    <section className="most-searched-section">
-      <div className="container box-container">
-        <h2 className="section-title">The most searched cars</h2>
+    <section className="py-16 bg-white">
+      <div className="container-custom">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-8 tracking-tight relative inline-block">
+          The most searched cars
+          <div className="absolute -bottom-2 left-0 w-1/3 h-1 bg-primary rounded-full"></div>
+        </h2>
         
-        <div className="category-tabs">
+        {/* Category Tabs */}
+        <div className="flex overflow-x-auto gap-4 md:gap-8 mb-10 pb-2 border-b border-gray-200 hide-scrollbar scroll-smooth">
           {categories.map(cat => (
             <button 
               key={cat}
-              className={`category-tab ${activeCategory === cat ? 'active' : ''}`}
+              className={`pb-4 px-2 whitespace-nowrap font-semibold text-[15px] transition-all border-b-2 ${activeCategory === cat ? 'text-primary border-primary' : 'text-gray-500 border-transparent hover:text-gray-800'}`}
               onClick={() => setActiveCategory(cat)}
             >
               {cat}
@@ -47,28 +49,61 @@ const MostSearchedCars = () => {
           ))}
         </div>
 
-        <div className="cars-carousel-wrapper">
+        {/* Carousel / Grid Wrapper */}
+        <div className="relative group">
           {loading ? (
-            <div className="loading-state">Loading cars...</div>
+            <div className="flex justify-center items-center h-64 text-gray-400 font-medium animate-pulse">
+              <div className="w-8 h-8 border-4 border-gray-200 border-t-primary rounded-full animate-spin mr-3"></div>
+              Loading cars...
+            </div>
           ) : (
-            <div className="cars-grid">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {cars.length > 0 ? (
                 cars.map(car => (
-                  <CarCard key={car.id} car={car} />
+                  <div key={car.id || car._id} className="animate-fade-in-up">
+                    <CarCard car={car} />
+                  </div>
                 ))
               ) : (
-                <p>No cars found in this category.</p>
+                <div className="col-span-full text-center py-12 text-gray-500 bg-gray-50 rounded-xl border border-gray-100">
+                  <p className="text-lg">No cars found in this category.</p>
+                </div>
               )}
             </div>
           )}
           
-          <button className="carousel-nav-btn next">→</button>
+          {/* We would wire this up properly in a real carousel, for now it's just visual */}
+          {cars.length > 0 && (
+            <button className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg items-center justify-center text-primary border border-gray-100 hover:bg-primary hover:text-white transition-all z-10 opacity-0 group-hover:opacity-100 focus:opacity-100">
+              <span className="text-xl font-bold">→</span>
+            </button>
+          )}
         </div>
 
-        <div className="view-all-link">
-          <a href="#">View All {activeCategory} Cars <span className="arrow">→</span></a>
+        <div className="mt-10 text-center">
+          <a href="#" className="inline-flex items-center text-primary font-bold hover:text-primary-hover transition-colors text-[15px]">
+            View All {activeCategory} Cars 
+            <span className="ml-2 bg-primary/10 w-8 h-8 rounded-full flex items-center justify-center text-primary">→</span>
+          </a>
         </div>
       </div>
+
+      <style dangerouslySetInnerHTML={{__html: `
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+          animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+      `}} />
     </section>
   );
 };

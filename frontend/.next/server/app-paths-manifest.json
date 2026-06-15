@@ -3,6 +3,7 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/admin/page": "app/admin/page.js",
   "/car/[id]/page": "app/car/[id]/page.js",
+  "/compare/page": "app/compare/page.js",
   "/login/page": "app/login/page.js",
   "/page": "app/page.js",
   "/signup/page": "app/signup/page.js"
