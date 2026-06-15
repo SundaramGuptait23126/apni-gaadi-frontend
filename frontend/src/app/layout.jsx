@@ -1,5 +1,4 @@
 import '../index.css';
-import '../App.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { AuthProvider } from '../context/AuthContext';
@@ -11,12 +10,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body>
         <AuthProvider>
-          <div className="app-container">
+          <div className="min-h-screen flex flex-col">
             <Header />
-            {children}
+            <main className="flex-grow">{children}</main>
             <Footer />
           </div>
         </AuthProvider>
