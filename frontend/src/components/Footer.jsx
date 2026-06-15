@@ -40,7 +40,7 @@ const Footer = () => {
         {/* Links Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           <div>
-            <h4 className="text-[13px] text-[#ccc] font-bold mb-5 tracking-wider">ABOUT CARDEKHO</h4>
+            <h4 className="text-[13px] text-[#ccc] font-bold mb-5 tracking-wider">ABOUT APNIGAADIDEKHO</h4>
             <ul className="space-y-3">
               <li><a href="#" className="text-[#aaa] text-[13px] hover:text-white transition-colors">About</a></li>
               <li><a href="#" className="text-[#aaa] text-[13px] hover:text-white transition-colors">Careers With Us</a></li>
@@ -75,7 +75,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-[13px] text-[#ccc] font-bold mb-5 tracking-wider">EXPERIENCE CARDEKHO APP</h4>
+            <h4 className="text-[13px] text-[#ccc] font-bold mb-5 tracking-wider">EXPERIENCE APNIGAADIDEKHO APP</h4>
             <div className="flex flex-col gap-3 mb-8">
               <button className="flex items-center justify-center gap-3 bg-[#444] border-none text-white p-2.5 rounded hover:bg-[#555] transition-colors w-40">
                 <span className="text-2xl leading-none">🍎</span>
@@ -93,7 +93,7 @@ const Footer = () => {
               </button>
             </div>
 
-            <h4 className="text-[13px] text-[#ccc] font-bold mb-4 tracking-wider mt-4">CARDEKHO GROUP VENTURES</h4>
+            <h4 className="text-[13px] text-[#ccc] font-bold mb-4 tracking-wider mt-4">APNIGAADIDEKHO GROUP VENTURES</h4>
             <div className="flex flex-wrap gap-3">
               <div className="bg-[#444] px-2.5 py-1 rounded text-xs font-bold text-[#ddd]">BikeDekho</div>
               <div className="bg-[#444] px-2.5 py-1 rounded text-xs font-bold text-[#ddd]">rupyy</div>

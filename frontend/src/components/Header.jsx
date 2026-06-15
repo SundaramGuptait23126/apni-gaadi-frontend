@@ -31,7 +31,7 @@ const Header = () => {
               </h1>
               {/* Mobile-only logo text */}
               <h1 className="text-lg font-bold tracking-tight text-gray-900 sm:hidden">
-                CarDekho
+                ApniGaadiDekho<span className="text-primary text-xs font-semibold">.com</span>
               </h1>
             </Link>
           </div>
