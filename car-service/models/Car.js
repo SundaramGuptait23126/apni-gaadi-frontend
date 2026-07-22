@@ -20,4 +20,9 @@ const carSchema = new mongoose.Schema({
     isFeatured: { type: Boolean, default: false }
 }, { timestamps: true });
 
+carSchema.index({ category: 1, subCategory: 1 });
+carSchema.index({ isFeatured: 1 });
+carSchema.index({ brand: 1 });
+carSchema.index({ name: 'text', brand: 'text' });
+
 module.exports = mongoose.model('Car', carSchema);

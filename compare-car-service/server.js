@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -11,6 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 5003;
 
 app.use(cors());
+app.use(compression());
 app.use(express.json());
 
 connectValkey();

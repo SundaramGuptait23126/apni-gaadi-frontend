@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const dotenv = require('dotenv');
 const { connectDB, sequelize } = require('./config/db');
 const { connectRedis } = require('./config/redisClient');
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors());
+app.use(compression());
 app.use(express.json());
 
 // Routes

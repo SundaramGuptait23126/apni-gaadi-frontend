@@ -24,11 +24,3 @@ services:
     env_file:
       - ./compare-car-service/.env
     restart: unless-stopped
-
-  frontend:
-    build: ./frontend
-    container_name: apni-gaadi-frontend
-    network_mode: "host"
-    env_file:
-      - ./frontend/.env
-    restart: unless-stopped
