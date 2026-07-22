@@ -5,6 +5,13 @@ networks:
     driver: bridge
 
 services:
+  redis:
+    image: redis:alpine
+    container_name: apni-gaadi-redis
+    networks:
+      - apnigaadi_net
+    restart: unless-stopped
+
   nginx:
     build: ./nginx
     container_name: apni-gaadi-nginx
