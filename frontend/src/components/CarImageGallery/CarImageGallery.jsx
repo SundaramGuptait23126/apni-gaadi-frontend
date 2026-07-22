@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { optimizeCloudinaryUrl } from '../../utils/imageUtils';
 import './CarImageGallery.css';
 
 const CarImageGallery = ({ car }) => {
@@ -50,11 +51,12 @@ const CarImageGallery = ({ car }) => {
     <>
       <div className="car-image-section">
         <img 
-          src={car.imageUrl} 
+          src={optimizeCloudinaryUrl(car.imageUrl, 800)} 
           alt={car.name} 
           className="main-car-image" 
           onClick={() => handleOpenModal('exterior')} 
           style={{ cursor: 'pointer' }}
+          loading="lazy"
         />
         
         {car.images && car.images.length > 1 && (
@@ -62,10 +64,11 @@ const CarImageGallery = ({ car }) => {
             {car.images.slice(0, 4).map((img, index) => (
               <img 
                 key={index} 
-                src={img} 
+                src={optimizeCloudinaryUrl(img, 200)} 
                 alt={`${car.name} - ${index + 1}`} 
                 className="thumbnail-image" 
                 onClick={() => handleOpenModal('exterior')}
+                loading="lazy"
               />
             ))}
           </div>
@@ -108,7 +111,7 @@ const CarImageGallery = ({ car }) => {
             {activeImages.length > 0 ? (
               <div className="gallery-main-view">
                 <button className="gallery-nav-btn prev" onClick={handlePrev}><FiChevronLeft size={36} /></button>
-                <img src={activeImages[currentIndex]} alt={`${activeTab} view ${currentIndex + 1}`} className="gallery-main-img" />
+                <img src={optimizeCloudinaryUrl(activeImages[currentIndex], 1200)} alt={`${activeTab} view ${currentIndex + 1}`} className="gallery-main-img" loading="lazy" />
                 <button className="gallery-nav-btn next" onClick={handleNext}><FiChevronRight size={36} /></button>
                 <div className="gallery-counter">
                   {currentIndex + 1}/{activeImages.length} {car.name} {activeTab === 'exterior' ? 'Exterior' : 'Interior'} View
