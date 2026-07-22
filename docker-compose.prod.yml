@@ -14,6 +14,10 @@ services:
       - apnigaadi_net
     depends_on:
       - api-gateway
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
     restart: unless-stopped
 
   api-gateway:
@@ -25,6 +29,10 @@ services:
       - auth-service
       - car-service
       - compare-car-service
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
     restart: unless-stopped
 
   auth-service:

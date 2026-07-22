@@ -7,10 +7,19 @@ const morgan = require('morgan');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Security and Logging Middleware
+// Security Middleware
 app.use(helmet());
 app.use(cors());
-app.use(morgan('combined'));
+// Removed morgan logging to save CPU/Disk IO at 100k scale
+
+// Custom HTTP Agent for Persistent Connections
+const http = require('http');
+const keepAliveAgent = new http.Agent({
+    keepAlive: true,
+    maxSockets: 65535, // Match Nginx max connections
+    maxFreeSockets: 1024,
+    timeout: 60000
+});
 
 // Define Proxies
 const proxies = [
@@ -33,10 +42,10 @@ proxies.forEach(proxy => {
     app.use(proxy.route, createProxyMiddleware({
         target: proxy.target,
         changeOrigin: true,
+        agent: keepAliveAgent, // Use persistent connections
         timeout: 60000, // 1 minute timeout
         proxyTimeout: 60000,
         onError: (err, req, res) => {
-            console.error(`Error with proxy for ${proxy.route}:`, err);
             res.status(502).json({ error: 'Gateway Error: Upstream service unavailable' });
         }
     }));
