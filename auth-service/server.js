@@ -33,9 +33,14 @@ const startServer = async () => {
         await sequelize.sync({ alter: true });
         console.log('Database synced');
 
-        app.listen(PORT, () => {
+        // Start Server
+        const server = app.listen(PORT, () => {
             console.log(`Auth Service running on port ${PORT}`);
         });
+
+        // Enable Keep-Alive to handle heavy burst traffic
+        server.keepAliveTimeout = 61000;
+        server.headersTimeout = 65000;
     } catch (error) {
         console.error('Failed to start server:', error);
     }

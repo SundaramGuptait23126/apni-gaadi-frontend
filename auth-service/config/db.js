@@ -6,6 +6,13 @@ dotenv.config();
 const sequelize = new Sequelize(process.env.DB_URI, {
     dialect: 'mysql',
     logging: false,
+    pool: {
+        max: 500,
+        min: 50,
+        acquire: 60000,
+        idle: 10000,
+        evict: 10000
+    },
     dialectOptions: {
         ssl: {
             rejectUnauthorized: false
