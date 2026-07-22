@@ -2,7 +2,8 @@ const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const cors = require('cors');
 const helmet = require('helmet');
-// morgan removed
+const { verifyToken } = require('./middleware/auth');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -19,6 +20,10 @@ const keepAliveAgent = new http.Agent({
     maxFreeSockets: 1024,
     timeout: 60000
 });
+
+// Global JWT Auth Middleware
+app.use(verifyToken);
+
 
 // Define Proxies
 const proxies = [
