@@ -2,8 +2,7 @@ const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const cors = require('cors');
 const helmet = require('helmet');
-const morgan = require('morgan');
-
+// morgan removed
 const app = express();
 const PORT = process.env.PORT || 5000;
 
