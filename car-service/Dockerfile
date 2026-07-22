@@ -12,8 +12,9 @@ WORKDIR /usr/src/app
 # Sabse pehle sirf package.json copy karo (taaki agar code change ho par dependencies same rahein, toh docker cache use karega).
 COPY package*.json ./
 
-# 4. Install Dependencies
+# 4. Install Dependencies and PM2
 RUN npm install
+RUN npm install -g pm2
 
 # 5. Saara Code Copy Karna
 # Ab baaki bacha hua poora code container mein copy karo.
@@ -25,4 +26,4 @@ EXPOSE 5002
 
 # 7. Start Command
 # Container start hote hi konsi command chalani hai?
-CMD ["npm", "start"]
+CMD ["pm2-runtime", "ecosystem.config.js"]
