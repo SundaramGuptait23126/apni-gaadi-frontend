@@ -25,4 +25,10 @@ carSchema.index({ isFeatured: 1 });
 carSchema.index({ brand: 1 });
 carSchema.index({ name: 'text', brand: 'text' });
 
+// Sort-specific indexes for fast data loading
+carSchema.index({ createdAt: -1 });
+carSchema.index({ category: 1, createdAt: -1 });
+carSchema.index({ category: 1, subCategory: 1, createdAt: -1 });
+carSchema.index({ isFeatured: 1, createdAt: -1 });
+
 module.exports = mongoose.model('Car', carSchema);

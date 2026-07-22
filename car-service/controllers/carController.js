@@ -99,7 +99,7 @@ const getCars = async (req, res) => {
             query.isFeatured = true;
         }
 
-        const cars = await Car.find(query).sort({ createdAt: -1 });
+        const cars = await Car.find(query).sort({ createdAt: -1 }).lean();
 
         // 3. Save the result to Valkey cache for 1 hour (3600 seconds)
         if (valkeyClient) {
@@ -150,7 +150,7 @@ const getCarsByCategory = async (req, res) => {
             query.subCategory = subCategory;
         }
 
-        const cars = await Car.find(query).sort({ createdAt: -1 });
+        const cars = await Car.find(query).sort({ createdAt: -1 }).lean();
 
         // 3. Save the result to Valkey cache for 1 hour (3600 seconds)
         if (valkeyClient) {
@@ -188,7 +188,7 @@ const getCarById = async (req, res) => {
             }
         }
 
-        const car = await Car.findById(id);
+        const car = await Car.findById(id).lean();
         if (!car) {
             return res.status(404).json({ message: 'Car not found' });
         }
