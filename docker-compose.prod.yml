@@ -1,10 +1,37 @@
 version: '3.8'
 
+networks:
+  apnigaadi_net:
+    driver: bridge
+
 services:
+  nginx:
+    build: ./nginx
+    container_name: apni-gaadi-nginx
+    ports:
+      - "80:80"
+    networks:
+      - apnigaadi_net
+    depends_on:
+      - api-gateway
+    restart: unless-stopped
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: apni-gaadi-api-gateway
+    networks:
+      - apnigaadi_net
+    depends_on:
+      - auth-service
+      - car-service
+      - compare-car-service
+    restart: unless-stopped
+
   auth-service:
     build: ./auth-service
     container_name: apni-gaadi-auth-service
-    network_mode: "host"
+    networks:
+      - apnigaadi_net
     env_file:
       - ./auth-service/.env
     restart: unless-stopped
@@ -12,7 +39,8 @@ services:
   car-service:
     build: ./car-service
     container_name: apni-gaadi-car-service
-    network_mode: "host"
+    networks:
+      - apnigaadi_net
     env_file:
       - ./car-service/.env
     restart: unless-stopped
@@ -20,7 +48,8 @@ services:
   compare-car-service:
     build: ./compare-car-service
     container_name: apni-gaadi-compare-car-service
-    network_mode: "host"
+    networks:
+      - apnigaadi_net
     env_file:
       - ./compare-car-service/.env
     restart: unless-stopped
