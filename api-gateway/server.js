@@ -5,7 +5,7 @@ const helmet = require('helmet');
 const { verifyToken } = require('./middleware/auth');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 5000; // Hardcoded to avoid conflict with auth-service env
 
 // Security Middleware
 app.use(helmet());
