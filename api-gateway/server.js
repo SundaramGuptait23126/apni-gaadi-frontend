@@ -38,6 +38,10 @@ const proxies = [
     {
         route: '/api/compare',
         target: 'http://compare-car-service:5003'
+    },
+    {
+        route: '/api/profile',
+        target: 'http://profile-service:5004'
     }
 ];
 

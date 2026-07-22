@@ -19,3 +19,12 @@ services:
     
     # Agar code mein crash ho toh aage kya karna hai?
     restart: unless-stopped
+
+  profile-service:
+    build: ./profile-service
+    container_name: apni-gaadi-profile-service
+    ports:
+      - "5004:5004"
+    env_file:
+      - ./profile-service/.env
+    restart: unless-stopped

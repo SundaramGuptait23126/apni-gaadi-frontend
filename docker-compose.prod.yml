@@ -39,6 +39,7 @@ services:
       - auth-service
       - car-service
       - compare-car-service
+      - profile-service
     env_file:
       - ./auth-service/.env
     ulimits:
@@ -75,4 +76,13 @@ services:
       - apnigaadi_net
     env_file:
       - ./compare-car-service/.env
+    restart: unless-stopped
+
+  profile-service:
+    build: ./profile-service
+    container_name: apni-gaadi-profile-service
+    networks:
+      - apnigaadi_net
+    env_file:
+      - ./profile-service/.env
     restart: unless-stopped
