@@ -30,7 +30,7 @@ const startServer = async () => {
         await connectRedis();
         
         // Sync models with DB (Creates table if it doesn't exist)
-        await sequelize.sync({ alter: true });
+        await sequelize.sync();
         console.log('Database synced');
 
         // Start Server
