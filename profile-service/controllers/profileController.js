@@ -37,12 +37,22 @@ const updateProfile = async (req, res) => {
             return res.status(401).json({ message: 'Unauthorized' });
         }
 
-        const { phone, address, avatarUrl, savedCars, preferences } = req.body;
+        const { 
+            phone, address, avatarUrl, 
+            shortlistedVehicles, orders, myVehicles, 
+            myGarage, activityLogs, consents, 
+            linkedAccounts, preferences 
+        } = req.body;
 
         // Upsert will create it if it doesn't exist
         const updatedProfile = await Profile.findOneAndUpdate(
             { userId },
-            { phone, address, avatarUrl, savedCars, preferences },
+            { 
+                phone, address, avatarUrl, 
+                shortlistedVehicles, orders, myVehicles, 
+                myGarage, activityLogs, consents, 
+                linkedAccounts, preferences 
+            },
             { new: true, upsert: true, runValidators: true }
         ).lean();
 
