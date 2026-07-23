@@ -1,7 +1,8 @@
 "use client";
 import React, { useContext, useState } from 'react';
 import Link from 'next/link';
-import { FiSearch, FiHeart, FiUser, FiMapPin, FiShoppingBag, FiActivity, FiTruck, FiHome, FiSettings, FiLogOut, FiMenu, FiX, FiMic } from 'react-icons/fi';
+import { FiSearch, FiHeart, FiUser, FiMapPin, FiShoppingBag, FiActivity, FiTruck, FiHome, FiSettings, FiLogOut, FiMenu, FiX, FiMic, FiBox, FiClock, FiFileText } from 'react-icons/fi';
+import { IoCarOutline } from 'react-icons/io5';
 import { AuthContext } from '../context/AuthContext';
 
 const Header = () => {
@@ -77,15 +78,28 @@ const Header = () => {
                 <span className="hidden sm:inline text-gray-800">Hello {user.name}</span>
                 <span className="text-xs text-gray-400 hidden sm:inline">▾</span>
                 
-                <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                  <div className="p-4 border-b border-gray-100 bg-gray-50 rounded-t-xl">
+                <div className="absolute right-0 top-full mt-2 w-72 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+                  <div className="bg-[#f4f6f9] p-5 flex flex-col items-center border-b border-gray-100">
+                    <div className="w-14 h-14 bg-[#8ba4be] text-white rounded-full flex items-center justify-center text-xl mb-3 font-semibold uppercase">
+                      {user.name?.charAt(0) || 'U'}
+                    </div>
                     <p className="font-semibold text-gray-900">{user.name}</p>
-                    <p className="text-xs text-gray-500">{user.email}</p>
+                    <p className="text-xs text-gray-500 mt-1">{user.email || '9453028301'}</p>
+                    <Link href="/profile" className="text-[#3a82f6] text-xs mt-2 hover:underline">
+                      Link your e-mail or social account
+                    </Link>
                   </div>
-                  <div className="p-2 space-y-1">
-                    <div className="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors"><FiShoppingBag /> My Orders</div>
-                    <div className="flex items-center gap-3 px-3 py-2 text-gray-600 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors"><FiHeart /> Shortlisted Vehicles</div>
-                    <div className="flex items-center gap-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full text-left" onClick={logout}><FiLogOut /> Logout</div>
+                  <div className="p-2 space-y-0.5">
+                    <Link href="/profile" className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-sm font-medium"><FiBox className="text-lg" /> My Orders</Link>
+                    <Link href="/profile" className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-sm font-medium"><FiHeart className="text-lg" /> Shortlisted Vehicles</Link>
+                    <Link href="/profile" className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-sm font-medium"><FiClock className="text-lg" /> My Activity</Link>
+                    <Link href="/profile" className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-sm font-medium"><FiFileText className="text-lg" /> My Vehicles</Link>
+                    <Link href="/profile" className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-sm font-medium"><IoCarOutline className="text-lg" /> My Garage</Link>
+                    <Link href="/profile" className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-sm font-medium"><FiSettings className="text-lg" /> Manage Consents</Link>
+                    <Link href="/profile" className="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors text-sm font-medium"><FiSettings className="text-lg" /> Profile Settings</Link>
+                    <div className="border-t border-gray-100 my-1 pt-1">
+                      <div className="flex items-center gap-3 px-3 py-2.5 text-gray-800 hover:bg-gray-50 rounded-lg transition-colors text-sm font-medium cursor-pointer w-full text-left" onClick={logout}><FiLogOut className="text-lg" /> Logout</div>
+                    </div>
                   </div>
                 </div>
               </div>
