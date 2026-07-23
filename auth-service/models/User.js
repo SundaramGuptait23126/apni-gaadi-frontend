@@ -22,6 +22,14 @@ const User = sequelize.define('User', {
     password: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    failedLoginAttempts: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+    },
+    lockUntil: {
+        type: DataTypes.DATE,
+        allowNull: true
     }
 }, {
     timestamps: true

@@ -8,10 +8,11 @@ if (process.env.REDIS_URI) {
     redisClient.on('error', (err) => console.error('Redis Client Error in Gateway', err));
 }
 
-// Define routes that DO NOT require authentication
 const publicRoutes = [
     { method: 'POST', path: '/api/auth/login' },
-    { method: 'POST', path: '/api/auth/register' },
+    { method: 'POST', path: '/api/auth/signup' },
+    { method: 'POST', path: '/api/auth/register' }, // keeping for backward compatibility
+    { method: 'POST', path: '/api/auth/refresh-token' },
     { method: 'GET', path: '/api/cars' },      // Allow all GET requests for cars
     { method: 'GET', path: '/api/compare' },   // Allow all GET requests for compare
     { method: 'GET', path: '/health' }

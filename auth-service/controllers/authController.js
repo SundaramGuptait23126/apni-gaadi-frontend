@@ -27,6 +27,14 @@ const signup = async (req, res) => {
             return res.status(400).json({ message: 'Please provide all required fields' });
         }
 
+        // Strict Password Policy: Min 8 chars, 1 Uppercase, 1 Number, 1 Special Char
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            return res.status(400).json({ 
+                message: 'Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character.' 
+            });
+        }
+
         // Check if user already exists
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
@@ -58,16 +66,24 @@ const signup = async (req, res) => {
         }
         setL1Cache(`user:${email}`, userDataToCache);
 
-        // Create JWT token
-        const token = jwt.sign(
+        // Generate Dual Tokens
+        const accessToken = jwt.sign(
             { userId: newUser.id, email: newUser.email },
             process.env.JWT_SECRET,
+            { expiresIn: '15m' }
+        );
+
+        const refreshToken = jwt.sign(
+            { userId: newUser.id, email: newUser.email },
+            process.env.JWT_REFRESH_SECRET || (process.env.JWT_SECRET + '_refresh'),
             { expiresIn: '7d' }
         );
 
         res.status(201).json({
             message: 'User created successfully',
-            token,
+            token: accessToken, // for backward compatibility
+            accessToken,
+            refreshToken,
             user: { id: newUser.id, name: newUser.name, email: newUser.email }
         });
     } catch (error) {
@@ -84,87 +100,58 @@ const login = async (req, res) => {
             return res.status(400).json({ message: 'Please provide email and password' });
         }
 
-        let user;
-        const cacheKey = `user:${email}`;
-
-        // 1. Check Ultra-Fast L1 RAM Cache
-        if (l1Cache.has(cacheKey)) {
-            user = l1Cache.get(cacheKey);
-        } else {
-            // 2. Request Coalescing (Stampede Protection)
-            if (pendingRequests.has(cacheKey)) {
-                // Wait for the already-running query instead of triggering a new one
-                user = await pendingRequests.get(cacheKey);
-            } else {
-                // Create a single promise for the DB/Redis fetch
-                const fetchUserPromise = (async () => {
-                    let fetchedUser = null;
-                    const redisClient = getRedisClient();
-                    
-                    // Check L2 Redis Cache
-                    if (redisClient) {
-                        const cachedStr = await redisClient.get(cacheKey);
-                        if (cachedStr) {
-                            fetchedUser = JSON.parse(cachedStr);
-                        }
-                    }
-
-                    // Check L3 Database
-                    if (!fetchedUser) {
-                        const dbUser = await User.findOne({ where: { email } });
-                        if (dbUser) {
-                            fetchedUser = {
-                                id: dbUser.id,
-                                name: dbUser.name,
-                                email: dbUser.email,
-                                password: dbUser.password
-                            };
-                            
-                            // Save to L2 Redis
-                            if (redisClient) {
-                                await redisClient.setEx(cacheKey, 3600 * 24 * 7, JSON.stringify(fetchedUser));
-                            }
-                        }
-                    }
-                    return fetchedUser;
-                })();
-
-                // Store promise in pending map to coalesce simultaneous requests
-                pendingRequests.set(cacheKey, fetchUserPromise);
-                
-                try {
-                    user = await fetchUserPromise;
-                    if (user) {
-                        // Populate L1 RAM Cache
-                        setL1Cache(cacheKey, user);
-                    }
-                } finally {
-                    // Remove from pending map once resolved
-                    pendingRequests.delete(cacheKey);
-                }
-            }
-        }
+        // We fetch directly from DB to get the most accurate lock status (security over extreme caching for login)
+        const user = await User.findOne({ where: { email } });
 
         if (!user) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
+        // Check if account is locked
+        if (user.lockUntil && user.lockUntil > new Date()) {
+            return res.status(403).json({ 
+                message: 'Account is temporarily locked due to multiple failed login attempts. Please try again later.' 
+            });
+        }
+
         // Verify password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
+            // Increment failed attempts
+            user.failedLoginAttempts += 1;
+            if (user.failedLoginAttempts >= 5) {
+                // Lock account for 15 minutes
+                user.lockUntil = new Date(Date.now() + 15 * 60 * 1000);
+            }
+            await user.save();
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Create JWT token
-        const token = jwt.sign(
+        // Login successful, reset attempts
+        if (user.failedLoginAttempts > 0) {
+            user.failedLoginAttempts = 0;
+            user.lockUntil = null;
+            await user.save();
+        }
+
+        // Generate Dual Tokens (Access + Refresh)
+        const accessToken = jwt.sign(
             { userId: user.id, email: user.email },
             process.env.JWT_SECRET,
-            { expiresIn: '7d' }
+            { expiresIn: '15m' } // Short-lived Access Token
+        );
+
+        const refreshToken = jwt.sign(
+            { userId: user.id, email: user.email },
+            process.env.JWT_REFRESH_SECRET || (process.env.JWT_SECRET + '_refresh'),
+            { expiresIn: '7d' } // Long-lived Refresh Token
         );
 
         res.status(200).json({
             message: 'Login successful',
-            token,
+            token: accessToken, // for backward compatibility in frontend
+            accessToken,
+            refreshToken,
             user: { id: user.id, name: user.name, email: user.email }
         });
     } catch (error) {
@@ -206,4 +193,43 @@ const logout = async (req, res) => {
     }
 };
 
-module.exports = { signup, login, logout };
+const refreshToken = async (req, res) => {
+    try {
+        const { token } = req.body;
+        if (!token) {
+            return res.status(401).json({ message: 'Refresh token is required' });
+        }
+
+        const refreshSecret = process.env.JWT_REFRESH_SECRET || (process.env.JWT_SECRET + '_refresh');
+
+        // Verify refresh token
+        jwt.verify(token, refreshSecret, async (err, decoded) => {
+            if (err) {
+                return res.status(403).json({ message: 'Invalid or expired refresh token' });
+            }
+
+            // Optional: check if user still exists/isn't locked out in DB
+            const user = await User.findByPk(decoded.userId);
+            if (!user) {
+                return res.status(403).json({ message: 'User no longer exists' });
+            }
+            if (user.lockUntil && user.lockUntil > new Date()) {
+                return res.status(403).json({ message: 'Account is locked' });
+            }
+
+            // Issue new Access Token (15 min)
+            const newAccessToken = jwt.sign(
+                { userId: user.id, email: user.email },
+                process.env.JWT_SECRET,
+                { expiresIn: '15m' }
+            );
+
+            res.status(200).json({ accessToken: newAccessToken });
+        });
+    } catch (error) {
+        console.error('Refresh token error:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+module.exports = { signup, login, logout, refreshToken };
