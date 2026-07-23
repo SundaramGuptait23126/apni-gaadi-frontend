@@ -21,9 +21,8 @@ const Header = () => {
         setIsSearching(true);
         setShowSearchDropdown(true);
         try {
-          // Point to API Gateway on AWS
-          const apiUrl = process.env.NEXT_PUBLIC_SEARCH_API_URL || 'http://54.79.164.28/api/search';
-          const res = await fetch(`${apiUrl}?q=${searchQuery}`);
+          // Point to relative API route which gets proxied by next.config.mjs
+          const res = await fetch(`/api/search?q=${searchQuery}`);
           if (res.ok) {
             const data = await res.json();
             setSearchResults(data.results || []);
