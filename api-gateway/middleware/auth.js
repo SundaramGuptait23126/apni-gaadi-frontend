@@ -13,6 +13,7 @@ const publicRoutes = [
     { method: 'POST', path: '/api/auth/signup' },
     { method: 'POST', path: '/api/auth/register' }, // keeping for backward compatibility
     { method: 'POST', path: '/api/auth/refresh-token' },
+    { method: 'GET', path: '/api/search' },    // Allow search
     { method: 'GET', path: '/api/cars' },      // Allow all GET requests for cars
     { method: 'GET', path: '/api/compare' },   // Allow all GET requests for compare
     { method: 'GET', path: '/health' }

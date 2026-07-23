@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { FiSearch, FiHeart, FiUser, FiMapPin, FiShoppingBag, FiActivity, FiTruck, FiHome, FiSettings, FiLogOut, FiMenu, FiX, FiMic, FiBox, FiClock, FiFileText } from 'react-icons/fi';
 import { IoCarOutline } from 'react-icons/io5';
@@ -8,6 +8,49 @@ import { AuthContext } from '../context/AuthContext';
 const Header = () => {
   const { user, logout } = useContext(AuthContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const searchRef = useRef(null);
+
+  // Debounced Search
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchQuery.length >= 2) {
+        setIsSearching(true);
+        setShowSearchDropdown(true);
+        try {
+          // Point to API Gateway
+          const res = await fetch(`http://localhost:5000/api/search?q=${searchQuery}`);
+          if (res.ok) {
+            const data = await res.json();
+            setSearchResults(data.results || []);
+          }
+        } catch (error) {
+          console.error("Search error", error);
+        } finally {
+          setIsSearching(false);
+        }
+      } else {
+        setSearchResults([]);
+        setShowSearchDropdown(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
+
+  // Click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSearchDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <header className="bg-white sticky top-0 z-50">
@@ -38,23 +81,57 @@ const Header = () => {
           </div>
           
           {/* Search Bar - Desktop */}
-          <div className="hidden md:flex flex-1 max-w-2xl border border-gray-300 rounded-lg overflow-hidden bg-gray-50 focus-within:ring-2 focus-within:ring-primary/50 transition-all shadow-sm">
-            <select className="bg-white border-r border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 outline-none cursor-pointer">
-              <option>All</option>
-              <option>New Cars</option>
-              <option>Used Cars</option>
-            </select>
-            <div className="flex-1 flex items-center bg-white px-3">
-              <FiSearch className="text-gray-400 mr-2" size={18} />
-              <input 
-                type="text" 
-                placeholder="Search or Ask a Question" 
-                className="w-full py-2.5 outline-none text-sm bg-transparent placeholder-gray-400" 
-              />
+          <div ref={searchRef} className="hidden md:flex flex-1 max-w-2xl relative">
+            <div className="flex w-full border border-gray-300 rounded-lg overflow-hidden bg-gray-50 focus-within:ring-2 focus-within:ring-primary/50 transition-all shadow-sm relative z-20">
+              <select className="bg-white border-r border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 outline-none cursor-pointer">
+                <option>All</option>
+                <option>New Cars</option>
+                <option>Used Cars</option>
+              </select>
+              <div className="flex-1 flex items-center bg-white px-3 relative">
+                <FiSearch className="text-gray-400 mr-2" size={18} />
+                <input 
+                  type="text" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => { if(searchQuery.length >= 2) setShowSearchDropdown(true); }}
+                  placeholder="Search or Ask a Question" 
+                  className="w-full py-2.5 outline-none text-sm bg-transparent placeholder-gray-400" 
+                />
+                {isSearching && <div className="absolute right-3 w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>}
+              </div>
+              <button className="bg-primary text-white px-6 font-medium text-sm">
+                Search
+              </button>
             </div>
-            <button className="bg-primary text-white px-6 font-medium text-sm">
-              Search
-            </button>
+            
+            {/* Desktop Search Dropdown */}
+            {showSearchDropdown && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto">
+                {searchResults.length > 0 ? (
+                  <ul>
+                    {searchResults.map((car) => (
+                      <li key={car._id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50 cursor-pointer">
+                        <Link href={`/cars/${car._id}`} className="flex items-center px-4 py-3 gap-3">
+                          <div className="w-12 h-12 bg-gray-100 rounded flex-shrink-0 overflow-hidden relative">
+                            {/* Dummy Image for now, replace with car.image if available */}
+                            <div className="absolute inset-0 bg-gray-200 flex items-center justify-center text-xs text-gray-500">{car.brand?.[0]}</div>
+                          </div>
+                          <div>
+                            <div className="font-semibold text-gray-800 text-sm">{car.brand} {car.model}</div>
+                            <div className="text-xs text-gray-500">{car.variant} • ₹{car.price?.toLocaleString()}</div>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="p-4 text-center text-sm text-gray-500">
+                    {!isSearching ? "No cars found for this query." : "Searching..."}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Actions */}

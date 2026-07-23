@@ -28,3 +28,12 @@ services:
     env_file:
       - ./profile-service/.env
     restart: unless-stopped
+
+  search-service:
+    build: ./search-service
+    container_name: apni-gaadi-search-service
+    ports:
+      - "5005:5005"
+    env_file:
+      - ./search-service/.env
+    restart: unless-stopped

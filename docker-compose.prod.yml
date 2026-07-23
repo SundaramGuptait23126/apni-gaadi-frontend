@@ -40,6 +40,7 @@ services:
       - car-service
       - compare-car-service
       - profile-service
+      - search-service
     env_file:
       - ./auth-service/.env
     ulimits:
@@ -85,4 +86,13 @@ services:
       - apnigaadi_net
     env_file:
       - ./profile-service/.env
+    restart: unless-stopped
+
+  search-service:
+    build: ./search-service
+    container_name: apni-gaadi-search-service
+    networks:
+      - apnigaadi_net
+    env_file:
+      - ./search-service/.env
     restart: unless-stopped

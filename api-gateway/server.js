@@ -42,6 +42,10 @@ const proxies = [
     {
         route: '/api/profile',
         target: 'http://profile-service:5004'
+    },
+    {
+        route: '/api/search',
+        target: 'http://search-service:5005'
     }
 ];
 
