@@ -54,6 +54,7 @@ proxies.forEach(proxy => {
     app.use(proxy.route, createProxyMiddleware({
         target: proxy.target,
         changeOrigin: true,
+        pathRewrite: (path, req) => req.originalUrl,
         agent: keepAliveAgent, // Use persistent connections
         timeout: 60000, // 1 minute timeout
         proxyTimeout: 60000,
