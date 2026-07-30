@@ -25,9 +25,6 @@ services:
       nofile:
         soft: 65535
         hard: 65535
-    sysctls:
-      net.ipv4.tcp_tw_reuse: 1
-      net.core.somaxconn: 65535
     restart: unless-stopped
 
   api-gateway:
@@ -47,9 +44,6 @@ services:
       nofile:
         soft: 65535
         hard: 65535
-    sysctls:
-      net.ipv4.tcp_tw_reuse: 1
-      net.core.somaxconn: 65535
     restart: unless-stopped
 
   auth-service:

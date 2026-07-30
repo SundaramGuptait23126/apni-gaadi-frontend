@@ -11,8 +11,12 @@ const connectRedis = async () => {
 
         redisClient.on('error', (err) => console.log('Redis Client Error', err));
 
-        await redisClient.connect();
-        console.log('Redis Connected Successfully!');
+        try {
+            await redisClient.connect();
+            console.log('Redis Connected Successfully!');
+        } catch (err) {
+            console.error('Failed to connect to Redis:', err.message);
+        }
     } else {
         console.log('No REDIS_URI provided, skipping Redis caching setup.');
     }

@@ -3,7 +3,7 @@ const { signup, login, logout } = require('../controllers/authController');
 const { verifyToken } = require('../middleware/authMiddleware');
 
 const { rateLimit } = require('express-rate-limit');
-const RedisStore = require('rate-limit-redis');
+const { RedisStore } = require('rate-limit-redis');
 const { getRedisClient } = require('../config/redisClient');
 
 const router = express.Router();
@@ -15,9 +15,9 @@ const loginLimiter = rateLimit({
     message: { message: 'Too many login attempts from this IP, please try again after a minute' },
     standardHeaders: true,
     legacyHeaders: false,
-    store: new RedisStore({
-        sendCommand: (...args) => getRedisClient().sendCommand(args),
-    }),
+    // store: new RedisStore({
+    //     sendCommand: (...args) => getRedisClient().sendCommand(args),
+    // }),
 });
 
 router.post('/signup', signup);
