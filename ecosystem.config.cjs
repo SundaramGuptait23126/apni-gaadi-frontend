@@ -25,12 +25,36 @@ module.exports = {
       }
     },
     {
-      name: 'apni-gaadi-frontend',
-      script: 'npm',
-      args: 'start',
-      cwd: './frontend',
+      name: 'apni-gaadi-profile',
+      script: 'server.js',
+      cwd: './profile-service',
       env: {
         NODE_ENV: 'production'
+      }
+    },
+    {
+      name: 'apni-gaadi-search',
+      script: 'server.js',
+      cwd: './search-service',
+      env: {
+        NODE_ENV: 'production'
+      }
+    },
+    {
+      name: 'apni-gaadi-api-gateway',
+      script: 'server.js',
+      cwd: './api-gateway',
+      env: {
+        NODE_ENV: 'production'
+      }
+    },
+    {
+      name: 'apni-gaadi-frontend',
+      script: 'npm',
+      args: 'run dev',
+      cwd: './frontend',
+      env: {
+        NODE_ENV: 'development'
       }
     }
   ]

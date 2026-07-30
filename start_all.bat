@@ -1,0 +1,23 @@
+@echo off
+echo Starting API Gateway...
+start "API Gateway" cmd /c "cd api-gateway && npm start"
+
+echo Starting Auth Service...
+start "Auth Service" cmd /c "cd auth-service && npm start"
+
+echo Starting Car Service...
+start "Car Service" cmd /c "cd car-service && npm start"
+
+echo Starting Compare Car Service...
+start "Compare Service" cmd /c "cd compare-car-service && npm start"
+
+echo Starting Profile Service...
+start "Profile Service" cmd /c "cd profile-service && npm start"
+
+echo Starting Search Service...
+start "Search Service" cmd /c "cd search-service && npm start"
+
+echo Starting Frontend...
+start "Frontend" cmd /c "cd frontend && npm run dev"
+
+echo All services are starting up!
