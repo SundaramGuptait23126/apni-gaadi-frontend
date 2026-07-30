@@ -21,8 +21,8 @@ const Header = () => {
         setIsSearching(true);
         setShowSearchDropdown(true);
         try {
-          // Point to API Gateway
-          const res = await fetch(`http://localhost:5000/api/search?q=${searchQuery}`);
+          // Point to API Gateway via relative URL so Next.js rewrite works
+          const res = await fetch(`/api/search?q=${searchQuery}`);
           if (res.ok) {
             const data = await res.json();
             setSearchResults(data.results || []);

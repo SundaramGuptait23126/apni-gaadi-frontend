@@ -6,7 +6,7 @@ import CarImageGallery from '../../../components/CarImageGallery/CarImageGallery
 
 async function getCar(id) {
   try {
-    const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://localhost:5002/api/cars';
+    const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://3.25.228.91/api/cars';
     const res = await fetch(`${carApiUrl}/${id}`, { cache: 'no-store' });
     if (!res.ok) {
       return null;
