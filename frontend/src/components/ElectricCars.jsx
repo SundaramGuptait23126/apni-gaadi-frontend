@@ -11,7 +11,7 @@ const ElectricCars = () => {
     const fetchCars = async () => {
       setLoading(true);
       try {
-        const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || '/api/cars';
+        const carApiUrl = '/api/cars';
         const res = await fetch(`${carApiUrl}/category/Electric%20Cars`);
         const data = await res.json();
         setCars(data);
