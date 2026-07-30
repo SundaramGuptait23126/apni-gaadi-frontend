@@ -96,7 +96,7 @@ const AdminDashboard = () => {
     Array.from(interiorImages).forEach(file => data.append('interiorImages', file));
 
     try {
-      const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://54.79.164.28/api/cars';
+      const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || '/api/cars';
       const response = await fetch(carApiUrl, {
         method: 'POST',
         body: data,
@@ -129,7 +129,7 @@ const AdminDashboard = () => {
           <h2>Admin Dashboard: Add New Car</h2>
           <p>Upload a new car directly to your MongoDB and Cloudinary storage.</p>
           <p style={{ color: 'blue', fontWeight: 'bold' }}>
-            System Check: Using API URL: {process.env.NEXT_PUBLIC_CAR_API_URL || 'http://54.79.164.28/api/cars'}
+            System Check: Using API URL: {process.env.NEXT_PUBLIC_CAR_API_URL || '/api/cars'}
           </p>
         </div>
 

@@ -15,7 +15,7 @@ export default function CompareCars() {
   useEffect(() => {
     const fetchAllCars = async () => {
       try {
-        const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || 'http://54.79.164.28/api/cars';
+        const carApiUrl = process.env.NEXT_PUBLIC_CAR_API_URL || '/api/cars';
         const res = await fetch(carApiUrl);
         if (!res.ok) throw new Error('Failed to fetch cars list');
         const data = await res.json();
@@ -47,7 +47,7 @@ export default function CompareCars() {
     try {
       // In production, define NEXT_PUBLIC_COMPARE_API_URL in Vercel. 
       // Defaults to localhost for local testing.
-      const compareApiUrl = process.env.NEXT_PUBLIC_COMPARE_API_URL || 'http://54.79.164.28/api/compare';
+      const compareApiUrl = process.env.NEXT_PUBLIC_COMPARE_API_URL || '/api/compare';
       const res = await fetch(`${compareApiUrl}?carIds=${car1Id},${car2Id}`);
       if (!res.ok) throw new Error('Failed to fetch comparison data');
       
