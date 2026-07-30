@@ -21,8 +21,8 @@ const Header = () => {
         setIsSearching(true);
         setShowSearchDropdown(true);
         try {
-          // Point to relative API route which gets proxied by next.config.mjs
-          const res = await fetch(`/api/search?q=${searchQuery}`);
+          // Point to API Gateway
+          const res = await fetch(`http://localhost:5000/api/search?q=${searchQuery}`);
           if (res.ok) {
             const data = await res.json();
             setSearchResults(data.results || []);
@@ -225,6 +225,9 @@ const Header = () => {
               </li>
               <li className="py-2 md:py-4 px-4 md:px-0 hover:text-primary transition-colors cursor-pointer border-b-2 border-transparent hover:border-primary flex items-center justify-between">
                 <Link href="/compare" className="flex-1">COMPARE CARS</Link>
+              </li>
+              <li className="py-2 md:py-4 px-4 md:px-0 hover:text-primary transition-colors cursor-pointer border-b-2 border-transparent hover:border-primary flex items-center justify-between">
+                <Link href="/accessories" className="flex-1">CAR ACCESSORIES</Link>
               </li>
               <li className="py-2 md:py-4 px-4 md:px-0 hover:text-primary transition-colors cursor-pointer border-b-2 border-transparent hover:border-primary flex items-center justify-between">
                 NEWS & REVIEWS <span className="text-xs text-gray-400 ml-1">▾</span>
