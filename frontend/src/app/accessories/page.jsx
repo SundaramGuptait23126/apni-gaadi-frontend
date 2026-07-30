@@ -1,159 +1,209 @@
-"use client";
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { FiShoppingCart, FiStar, FiFilter, FiChevronRight, FiCheck } from 'react-icons/fi';
+import React from 'react';
 
-const accessoriesData = [
-  { id: 1, name: "Premium 7D Floor Mats", category: "Interior", price: "₹2,499", rating: 4.8, image: "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-  { id: 2, name: "HD Dash Cam Dual Lens", category: "Electronics", price: "₹4,999", rating: 4.9, image: "https://images.unsplash.com/photo-1511473775474-06cce7c56950?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-  { id: 3, name: "Luxury Leather Seat Covers", category: "Interior", price: "₹6,500", rating: 4.7, image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-  { id: 4, name: "LED Headlight Bulbs (Pair)", category: "Exterior", price: "₹1,850", rating: 4.5, image: "https://images.unsplash.com/photo-1542282088-fe8426682b8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-  { id: 5, name: "Premium Car Perfume", category: "Car Care", price: "₹499", rating: 4.6, image: "https://images.unsplash.com/photo-1587309995166-512140a3224f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-  { id: 6, name: "Alloy Wheel Cleaner Spray", category: "Car Care", price: "₹350", rating: 4.3, image: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-  { id: 7, name: "Smart Tire Pressure Monitor", category: "Electronics", price: "₹2,100", rating: 4.8, image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-  { id: 8, name: "Carbon Fiber Spoiler", category: "Exterior", price: "₹3,200", rating: 4.4, image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }
-];
-
-const categories = ["All", "Interior", "Exterior", "Electronics", "Car Care"];
+export const metadata = {
+  title: 'Car Accessories | ApniGaadiDekho',
+  description: 'Shop premium car accessories for your vehicle. Best prices and top quality guaranteed.',
+};
 
 export default function AccessoriesPage() {
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [cart, setCart] = useState([]);
-
-  const filteredProducts = activeCategory === "All" 
-    ? accessoriesData 
-    : accessoriesData.filter(item => item.category === activeCategory);
-
-  const addToCart = (id) => {
-    if (!cart.includes(id)) {
-      setCart([...cart, id]);
-    }
-  };
+  const accessories = [
+    {
+      id: 1,
+      name: 'Premium Leather Seat Covers',
+      price: '₹4,999',
+      rating: 4.8,
+      reviews: 124,
+      image: 'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&w=800&q=80',
+      category: 'Interior'
+    },
+    {
+      id: 2,
+      name: 'All-Weather 3D Floor Mats',
+      price: '₹2,499',
+      rating: 4.6,
+      reviews: 89,
+      image: 'https://images.unsplash.com/photo-1542282088-fe8426682b8f?auto=format&fit=crop&w=800&q=80',
+      category: 'Interior'
+    },
+    {
+      id: 3,
+      name: 'High-Power LED Headlight Bulbs',
+      price: '₹3,299',
+      rating: 4.9,
+      reviews: 256,
+      image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=800&q=80',
+      category: 'Exterior'
+    },
+    {
+      id: 4,
+      name: 'Smart Dash Cam with Night Vision',
+      price: '₹5,999',
+      rating: 4.7,
+      reviews: 178,
+      image: 'https://images.unsplash.com/photo-1516015694769-e77be953a168?auto=format&fit=crop&w=800&q=80',
+      category: 'Electronics'
+    },
+    {
+      id: 5,
+      name: 'Premium Car Cover (Waterproof)',
+      price: '₹1,499',
+      rating: 4.4,
+      reviews: 62,
+      image: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=800&q=80',
+      category: 'Exterior'
+    },
+    {
+      id: 6,
+      name: 'Wireless Car Charger Mount',
+      price: '₹1,299',
+      rating: 4.5,
+      reviews: 312,
+      image: 'https://images.unsplash.com/photo-1585298198762-6721ea7f12e2?auto=format&fit=crop&w=800&q=80',
+      category: 'Electronics'
+    },
+    {
+      id: 7,
+      name: 'Microfiber Cleaning Cloth Set (4 Pcs)',
+      price: '₹399',
+      rating: 4.9,
+      reviews: 504,
+      image: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?auto=format&fit=crop&w=800&q=80',
+      category: 'Care'
+    },
+    {
+      id: 8,
+      name: 'Heavy Duty Tire Inflator 150 PSI',
+      price: '₹1,899',
+      rating: 4.8,
+      reviews: 145,
+      image: 'https://images.unsplash.com/photo-1598463567676-4767174dbfa3?auto=format&fit=crop&w=800&q=80',
+      category: 'Utility'
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Hero Section */}
-      <div className="relative bg-gray-900 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent z-10"></div>
-        <img 
-          src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
-          alt="Car Accessories Background" 
-          className="absolute inset-0 w-full h-full object-cover opacity-60"
-        />
-        <div className="relative z-20 container-custom py-16 md:py-24">
-          <div className="max-w-2xl">
-            <span className="inline-block px-3 py-1 bg-primary/20 text-primary font-semibold text-xs tracking-wider rounded-full mb-4 uppercase">
-              Official Store
-            </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-              Upgrade Your Ride <br/> <span className="text-primary">Premium Accessories</span>
-            </h1>
-            <p className="text-gray-300 text-lg md:text-xl mb-8 max-w-lg">
-              Discover our exclusive collection of high-quality car accessories designed to enhance your driving experience.
-            </p>
-            <div className="flex gap-4">
-              <button className="bg-primary hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-all shadow-[0_0_15px_rgba(235,81,44,0.4)]">
-                Shop Now
-              </button>
-            </div>
+    <main className="min-h-screen bg-gray-50 pb-20">
+      {/* Accessories Hero */}
+      <section className="bg-gray-900 text-white py-20 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-40">
+          <img 
+            src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1920&q=80" 
+            alt="Car Accessories Background" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/80 to-transparent"></div>
+        </div>
+        <div className="container-custom relative z-10">
+          <span className="inline-block px-4 py-1.5 bg-primary/20 text-primary font-bold rounded-full text-sm tracking-wide mb-4 border border-primary/30">
+            APNIGAADIDEKHO STORE
+          </span>
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 text-white">
+            Premium Car Accessories
+          </h1>
+          <p className="text-xl text-gray-300 max-w-2xl mb-8 leading-relaxed">
+            Upgrade your ride with our hand-picked selection of high-quality interior and exterior accessories. Free shipping on orders over ₹999.
+          </p>
+          <div className="flex gap-4">
+            <button className="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-xl font-bold transition-colors shadow-lg shadow-primary/30">
+              Shop Bestsellers
+            </button>
+            <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-8 py-3 rounded-xl font-bold border border-white/20 transition-colors">
+              Browse Categories
+            </button>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Main Content */}
-      <div className="container-custom mt-12 flex flex-col md:flex-row gap-8">
+      <section className="container-custom py-12 flex flex-col lg:flex-row gap-8">
         
         {/* Sidebar Filters */}
-        <div className="w-full md:w-64 flex-shrink-0">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 sticky top-24">
-            <h3 className="font-bold text-lg text-gray-900 mb-4 flex items-center gap-2">
-              <FiFilter /> Categories
-            </h3>
-            <ul className="space-y-2">
-              {categories.map((cat) => (
+        <aside className="w-full lg:w-64 flex-shrink-0">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
+            <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-100 pb-2">Categories</h3>
+            <ul className="space-y-3 mb-8">
+              {['All Accessories', 'Interior', 'Exterior', 'Electronics', 'Car Care', 'Utility'].map((cat, i) => (
                 <li key={cat}>
-                  <button 
-                    onClick={() => setActiveCategory(cat)}
-                    className={`w-full text-left px-4 py-2.5 rounded-lg transition-colors text-sm font-medium flex justify-between items-center ${
-                      activeCategory === cat 
-                      ? 'bg-primary/10 text-primary' 
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                    }`}
-                  >
-                    {cat}
-                    {activeCategory === cat && <FiCheck />}
-                  </button>
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <input type="radio" name="category" className="w-4 h-4 text-primary focus:ring-primary border-gray-300" defaultChecked={i === 0} />
+                    <span className={\`text-gray-600 group-hover:text-primary transition-colors font-medium \${i === 0 ? 'text-primary font-bold' : ''}\`}>
+                      {cat}
+                    </span>
+                  </label>
                 </li>
               ))}
             </ul>
+
+            <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-100 pb-2">Price Range</h3>
+            <div className="space-y-4">
+              <input type="range" className="w-full accent-primary" min="0" max="10000" defaultValue="5000" />
+              <div className="flex justify-between text-sm text-gray-500 font-medium">
+                <span>₹0</span>
+                <span>₹5,000+</span>
+              </div>
+            </div>
           </div>
-        </div>
+        </aside>
 
         {/* Product Grid */}
         <div className="flex-1">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
-              {activeCategory === "All" ? "Trending Products" : `${activeCategory} Accessories`}
-            </h2>
-            <span className="text-sm text-gray-500 font-medium">Showing {filteredProducts.length} Results</span>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-2xl font-bold text-gray-900">Featured Products</h2>
+            <select className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer shadow-sm">
+              <option>Sort by: Recommended</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+              <option>Customer Rating</option>
+            </select>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product) => (
-              <div key={product.id} className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
-                <div className="relative h-48 overflow-hidden bg-gray-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            {accessories.map((item) => (
+              <div key={item.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 group flex flex-col">
+                <div className="relative h-56 overflow-hidden bg-gray-100">
                   <img 
-                    src={product.image} 
-                    alt={product.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    src={item.image} 
+                    alt={item.name} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-xs font-bold text-gray-800 flex items-center gap-1 shadow-sm">
-                    <FiStar className="text-yellow-500 fill-yellow-500" /> {product.rating}
+                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-md text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    {item.category}
                   </div>
+                  <button className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 shadow-sm transition-colors">
+                    ♥
+                  </button>
                 </div>
                 
-                <div className="p-4">
-                  <div className="text-xs font-semibold text-primary uppercase tracking-wider mb-1">
-                    {product.category}
+                <div className="p-5 flex flex-col flex-1">
+                  <div className="flex items-center gap-1 mb-2">
+                    <span className="text-yellow-400 text-sm">★★★★★</span>
+                    <span className="text-xs font-medium text-gray-500 ml-1">{item.rating} ({item.reviews})</span>
                   </div>
-                  <h3 className="font-bold text-gray-900 text-[15px] mb-1 line-clamp-1 group-hover:text-primary transition-colors">
-                    {product.name}
+                  <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                    {item.name}
                   </h3>
-                  <div className="flex justify-between items-end mt-4">
-                    <div className="text-lg font-extrabold text-gray-900">
-                      {product.price}
-                    </div>
-                    <button 
-                      onClick={() => addToCart(product.id)}
-                      className={`h-9 px-4 rounded-lg font-medium text-sm transition-all flex items-center gap-2 ${
-                        cart.includes(product.id) 
-                        ? 'bg-green-100 text-green-700' 
-                        : 'bg-gray-900 text-white hover:bg-primary hover:shadow-[0_4px_10px_rgba(235,81,44,0.3)]'
-                      }`}
-                    >
-                      {cart.includes(product.id) ? (
-                        <><FiCheck /> Added</>
-                      ) : (
-                        <><FiShoppingCart /> Add</>
-                      )}
+                  <div className="mt-auto pt-4 flex items-center justify-between border-t border-gray-50">
+                    <span className="text-xl font-extrabold text-gray-900">{item.price}</span>
+                    <button className="bg-primary/10 hover:bg-primary text-primary hover:text-white p-2.5 rounded-xl transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                      </svg>
                     </button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-20 bg-white rounded-xl border border-gray-100">
-              <div className="w-16 h-16 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
-                <FiShoppingCart />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">No Products Found</h3>
-              <p className="text-gray-500 text-sm">We couldn't find any products in this category.</p>
-            </div>
-          )}
+
+          <div className="mt-12 flex justify-center">
+            <button className="border-2 border-gray-200 text-gray-600 hover:border-primary hover:text-primary font-bold px-8 py-3 rounded-xl transition-all">
+              Load More Products
+            </button>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

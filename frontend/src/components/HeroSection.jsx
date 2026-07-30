@@ -63,6 +63,12 @@ const HeroSection = ({ initialFeaturedCars }) => {
                 >
                   Used Car
                 </button>
+                <button 
+                  className="flex-1 pb-3 text-center font-medium transition-colors border-b-2 border-transparent text-gray-500 hover:text-gray-700"
+                  onClick={() => window.open('/accessories', '_blank')}
+                >
+                  Accessories
+                </button>
               </div>
 
               {/* Radio Group */}
