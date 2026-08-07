@@ -126,7 +126,7 @@ export default function AccessoriesPage() {
                 <li key={cat}>
                   <label className="flex items-center gap-3 cursor-pointer group">
                     <input type="radio" name="category" className="w-4 h-4 text-primary focus:ring-primary border-gray-300" defaultChecked={i === 0} />
-                    <span className={\`text-gray-600 group-hover:text-primary transition-colors font-medium \${i === 0 ? 'text-primary font-bold' : ''}\`}>
+                    <span className={`text-gray-600 group-hover:text-primary transition-colors font-medium ${i === 0 ? 'text-primary font-bold' : ''}`}>
                       {cat}
                     </span>
                   </label>
