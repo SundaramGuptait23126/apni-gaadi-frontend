@@ -1,10 +1,12 @@
 {
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
+  "/accessories/page": "/accessories",
   "/admin/page": "/admin",
   "/car/[id]/page": "/car/[id]",
   "/compare/page": "/compare",
   "/login/page": "/login",
   "/page": "/",
+  "/profile/page": "/profile",
   "/signup/page": "/signup"
 }

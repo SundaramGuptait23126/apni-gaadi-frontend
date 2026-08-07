@@ -1,10 +1,12 @@
 {
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
+  "/accessories/page": "app/accessories/page.js",
   "/admin/page": "app/admin/page.js",
   "/car/[id]/page": "app/car/[id]/page.js",
   "/compare/page": "app/compare/page.js",
   "/login/page": "app/login/page.js",
   "/page": "app/page.js",
+  "/profile/page": "app/profile/page.js",
   "/signup/page": "app/signup/page.js"
 }

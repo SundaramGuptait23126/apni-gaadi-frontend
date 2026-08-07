@@ -7,7 +7,7 @@ export const revalidate = 60; // ISR cache revalidation every 60 seconds
 export default async function HomePage() {
   let featuredCars = [];
   try {
-    const carApiUrl = 'http://54.79.164.28/api/cars';
+    const carApiUrl = 'http://16.176.228.203/api/cars';
     const res = await fetch(`${carApiUrl}?featured=true`, { next: { revalidate: 60 } });
     if (res.ok) {
       featuredCars = await res.json();
